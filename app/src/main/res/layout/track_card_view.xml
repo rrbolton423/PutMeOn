@@ -10,7 +10,7 @@
     android:gravity="center">
 
     <ImageView
-        android:id="@+id/detail_album_image_field"
+        android:id="@+id/song_image"
         android:layout_width="190dp"
         android:layout_height="190dp"
         android:src="@mipmap/ic_launcher"/>

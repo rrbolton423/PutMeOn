@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.bumptech.glide.Glide;
 import com.daprlabs.cardstack.SwipeDeck;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +31,9 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Call;
 import okhttp3.Request;
+
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 
 public class TrackRecommendationActivity extends AppCompatActivity implements TrackAsyncTask.IData {
 
@@ -45,10 +50,7 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     private String randomTrack;
     private ArrayList<String> artistNames = new ArrayList<>();
     private ArrayList<String> songNames = new ArrayList<>();
-    private ArrayList<String> artistName = new ArrayList<>();
-    private ArrayList<String> albumImgURL = new ArrayList<>();
-//    Integer[] images = new Integer[]{R.drawable.image1, R.drawable.image2....}; // Provide 6 Images or it will crash saying null pointer exception
-    private ArrayList<Integer> loadImage = new ArrayList<>();
+    private ArrayList<String> albumImgURLs = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
         setContentView(R.layout.activity_track_recommendation);
 
         accessToken = getIntent().getStringExtra("accessToken");
+
+        Log.i("TOKENTOKEN", "onCreate: " + accessToken);
 
         cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
         newSuggestionButton = (Button) findViewById(R.id.new_suggestions_button);
@@ -173,6 +177,7 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
         {
             songNames.add(tracks.get(i).name);
             artistNames.add(tracks.get(i).artist);
+            albumImgURLs.add(tracks.get(i).smallImageURL);
 //            cardStack.setLeftImage(R.id.left_image);
         }
         adapter = new SwipeDeckAdapter(artistNames, this);
@@ -259,6 +264,9 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
             ((TextView) v.findViewById(R.id.song_name)).setText(songNames.get(position));
             ((TextView) v.findViewById(R.id.artist_name)).setText(artistName.get(position));
 
+            Glide.with(context)
+                    .load(albumImgURLs.get(position))
+                    .into( ((ImageView) v.findViewById(R.id.song_image)));
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
