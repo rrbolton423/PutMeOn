@@ -2,6 +2,7 @@ package com.romellbolton.putmeon;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,7 @@ public class TrackUtil {
     static public class TrackJSONParser {
         static ArrayList<Track> parseTracks(String in) throws JSONException {
 
+            Log.i("TAGGY", "parseTracks: " + in);
             JSONObject root = new JSONObject(in);
             JSONArray JSONArrayTrack = null;
             if (root.has("results")) {
