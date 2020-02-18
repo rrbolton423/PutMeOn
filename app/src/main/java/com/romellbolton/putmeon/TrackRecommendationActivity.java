@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,23 +37,36 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     private ArrayList<Track> tracks = new ArrayList<>();
     private Call call;
     private SwipeDeck cardStack;
+    SwipeDeckAdapter adapter = new SwipeDeckAdapter(null, this);
+    private Button newSuggestionButton;
     private static final String LAST_FM_API_KEY = "dc133e92753caf4b21d826972d94c33e";
     private String accessToken = "accessToken";
     private String randomArtist;
     private String randomTrack;
     private ArrayList<String> albumName = new ArrayList<>();
-    private ArrayList<String> songName = new ArrayList<>();
+    private ArrayList<String> songNames = new ArrayList<>();
     private ArrayList<String> artistName = new ArrayList<>();
     private ArrayList<String> albumImgURL = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_actvity);
+        setContentView(R.layout.activity_track_recommendation);
 
         accessToken = getIntent().getStringExtra("accessToken");
-        setResponse("drake", "over");
+
         cardStack = (SwipeDeck) findViewById(R.id.swipe_deck);
+        newSuggestionButton = (Button) findViewById(R.id.new_suggestions_button);
+        newSuggestionButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+//                fetchRandomFavoriteSpotifyArtist();
+                setResponse("Kanye", "Power"); // Test Implementation
+            }
+
+        });
+        setResponse("drake", "over"); // Test Implementation
+//        fetchRandomFavoriteSpotifyArtist(); // Production Implementation, uncomment when using real Spotify account
     }
 
     private void cancelCall() {
@@ -143,13 +157,19 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     public void setUpData(ArrayList<Track> trackArrayList) {
         Log.i("MainActivity", String.valueOf(trackArrayList));
 
+        if (adapter.data != null) {
+            tracks = null;
+            adapter.data.clear();
+            adapter.notifyDataSetChanged();
+        }
+
         tracks = trackArrayList;
         for(int i = 0; i < tracks.size(); i++)
         {
-            songName.add(tracks.get(i).name);
+            songNames.add(tracks.get(i).name);
 //            cardStack.setLeftImage(R.id.left_image);
         }
-        final SwipeDeckAdapter adapter = new SwipeDeckAdapter(songName, this);
+        adapter = new SwipeDeckAdapter(songNames, this);
         cardStack.setAdapter(adapter);
         cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
@@ -187,7 +207,6 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
         // let user play 30 seconds of the selected track
         // TODO: Access favorites list by way of a menu button
         // TODO: Add track image, track name, album name, etc to TrackRecommendation screen
-        // TODO: Implement refresh button for user to get more tracks from a different random artist
         // TODO: Set an appropriate JSON return limit for the track recommendation screen
         // TODO: Use Glide, or Picasso, or ImageAsyncTask to load images within the PutMeOn app
         // TODO: Eventually, when track is clicked, let user play it using Spotify's API (Very very last implementation)

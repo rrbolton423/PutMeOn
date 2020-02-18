@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PutMeOn</string>
+    <string name="new_suggestions">New Suggestions</string>
 </resources>
