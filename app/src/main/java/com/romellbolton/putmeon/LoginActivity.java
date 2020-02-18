@@ -6,10 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
@@ -52,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
             if (response.getType() == AuthenticationResponse.Type.TOKEN) {
                 SessionManager sessionManager = new SessionManager();
                 sessionManager.createLoginSession(context, response.getAccessToken());
-                Intent intentLogin = new Intent(this, HomeActivity.class);
+                Intent intentLogin = new Intent(this, TrackRecommendationActivity.class);
                 startActivity(intentLogin);
             }
         }
