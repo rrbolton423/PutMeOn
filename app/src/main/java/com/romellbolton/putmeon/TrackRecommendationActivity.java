@@ -179,6 +179,7 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
         // TODO: Add track image, track name, album name, etc to TrackRecommendation screen
         // TODO: Implement refresh button for user to get more tracks from a different random artist
         // TODO: Set an appropriate JSON return limit for the track recommendation screen
+        // TODO: Use Glide, or Picasso, or ImageAsyncTask to load images within the PutMeOn app
         // TODO: Eventually, when track is clicked, let user play it using Spotify's API (Very very last implementation)
     }
 
