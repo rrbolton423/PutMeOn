@@ -18,7 +18,7 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String CLIENT_ID = "8740928683fe4ab6be03091a875ac618";
 
-    public SessionManager(){ }
+    public SessionManager() { }
 
     public void createLoginSession (Context context, String apiUserName){
         this.context = context;
@@ -31,7 +31,7 @@ public class SessionManager {
         editor.commit();
     }
 
-    public String getToken (){return PREF_NAME;}
+    public String getToken () {return PREF_NAME;}
 
     public HashMap<String, String> getUserDetails(){
         HashMap<String, String> user = new HashMap<String, String>();
@@ -39,7 +39,7 @@ public class SessionManager {
         return user;
     }
 
-    public String getClientId (){ return CLIENT_ID;}
+    public String getClientId () { return CLIENT_ID;}
 
     public void checkLogin(){
         if(!this.isLoggedIn()){

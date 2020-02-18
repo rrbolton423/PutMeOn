@@ -4,7 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Track implements Parcelable {
-    String name, artist, url, smallImageURL, largeImageURL, mbid;
+    String name;
+    String artist;
+    String url;
+    String smallImageURL;
+    String largeImageURL;
+    String mbid;
 
     public Track() { }
 

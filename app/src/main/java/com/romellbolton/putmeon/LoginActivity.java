@@ -50,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
                 SessionManager sessionManager = new SessionManager();
                 sessionManager.createLoginSession(context, response.getAccessToken());
                 Intent intentLogin = new Intent(this, TrackRecommendationActivity.class);
+                intentLogin.putExtra("accessToken", response.getAccessToken());
                 startActivity(intentLogin);
             }
         }
