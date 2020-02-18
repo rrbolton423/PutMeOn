@@ -38,7 +38,7 @@
             android:layout_gravity="center">
 
             <TextView
-                android:id="@+id/detail_artist_field"
+                android:id="@+id/artist_name"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:paddingStart="10dp"
@@ -48,15 +48,6 @@
                 android:textStyle="bold"
                 android:text="Maroon 5"/>
 
-            <TextView
-                android:id="@+id/detail_album_field"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
-                android:textSize="12sp"
-                android:textColor="#ffff"
-                android:textStyle="bold"
-                android:text="Red Pill Blues (Deluxe)"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

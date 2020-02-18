@@ -33,7 +33,7 @@ import okhttp3.Request;
 public class TrackRecommendationActivity extends AppCompatActivity implements TrackAsyncTask.IData {
 
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private ArrayList<RecentTrack> mUsersRandomRecentsList = new ArrayList<>();
+    private ArrayList<RecentTrack> mUsersRecentArtist = new ArrayList<>();
     private ArrayList<Track> tracks = new ArrayList<>();
     private Call call;
     private SwipeDeck cardStack;
@@ -43,7 +43,7 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     private String accessToken = "accessToken";
     private String randomArtist;
     private String randomTrack;
-    private ArrayList<String> albumName = new ArrayList<>();
+    private ArrayList<String> artistNames = new ArrayList<>();
     private ArrayList<String> songNames = new ArrayList<>();
     private ArrayList<String> artistName = new ArrayList<>();
     private ArrayList<String> albumImgURL = new ArrayList<>();
@@ -91,10 +91,10 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
                     try {
                         final JSONObject jsonObject = new JSONObject(response.body().string());
                         Log.e("TAG" , jsonObject.toString());
-                        mUsersRandomRecentsList = getArtists(jsonObject);
+                        mUsersRecentArtist = getArtists(jsonObject);
                         Random random = new Random();
-                        randomArtist = mUsersRandomRecentsList.get(random.nextInt(mUsersRandomRecentsList.size())).artistName;
-                        randomTrack = mUsersRandomRecentsList.get(random.nextInt(mUsersRandomRecentsList.size())).trackName;
+                        randomArtist = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).artistName;
+                        randomTrack = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).trackName;
                         setResponse(randomArtist, randomTrack);
                         Toast.makeText(getApplicationContext() , "DONE", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
@@ -130,16 +130,17 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
                     String artistName = jsonArtist.getString("name");
 
                     RecentTrack track_object = new RecentTrack(trackName, artistName);
-                    mUsersRandomRecentsList.add(track_object); //to be used in Ui later
-                    Log.i("MainActivity", mUsersRandomRecentsList.get(0).trackName);
-                    Log.i("MainActivity", mUsersRandomRecentsList.get(0).artistName);
+                    mUsersRecentArtist.add(track_object); //to be used in Ui later
+
+                    Log.i("MainActivity", mUsersRecentArtist.get(0).trackName);
+                    Log.i("MainActivity", mUsersRecentArtist.get(0).artistName);
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return mUsersRandomRecentsList;
+        return mUsersRecentArtist;
     }
 
     private void setResponse(String randomArtist, String randomTrack) {
@@ -159,19 +160,22 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     public void setUpData(ArrayList<Track> trackArrayList) {
         Log.i("MainActivity", String.valueOf(trackArrayList));
 
-        if (adapter.data != null) {
+        if (adapter.artistName != null) {
             tracks = null;
-            adapter.data.clear();
+            adapter.artistName.clear();
             adapter.notifyDataSetChanged();
         }
 
+        songNames.clear();
+        artistNames.clear();
         tracks = trackArrayList;
         for(int i = 0; i < tracks.size(); i++)
         {
             songNames.add(tracks.get(i).name);
+            artistNames.add(tracks.get(i).artist);
 //            cardStack.setLeftImage(R.id.left_image);
         }
-        adapter = new SwipeDeckAdapter(songNames, this);
+        adapter = new SwipeDeckAdapter(artistNames, this);
         cardStack.setAdapter(adapter);
         cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
             @Override
@@ -216,24 +220,25 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
 
     public class SwipeDeckAdapter extends BaseAdapter {
 
-        private List<String> data;
-//        private List<String> data;
+        private List<String> artistNames;
+        private List<String> artistName;
+        //        private List<String> artistName;
         private Context context;
 
-        public SwipeDeckAdapter(List<String> data, Context context) {
-            this.data = data;
-//            this.Images = listImages;
+        public SwipeDeckAdapter(ArrayList<String> artistNames, Context context) {
+//            this.artistNames = artistNames;
+            this.artistName = artistNames;
             this.context = context;
         }
 
         @Override
         public int getCount() {
-            return data.size();
+            return artistName.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return data.get(position);
+            return artistName.get(position);
         }
 
         @Override
@@ -250,7 +255,9 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
                 // normally use a viewholder
                 v = inflater.inflate(R.layout.track_card_view, parent, false);
             }
-            ((TextView) v.findViewById(R.id.song_name)).setText(data.get(position));
+
+            ((TextView) v.findViewById(R.id.song_name)).setText(songNames.get(position));
+            ((TextView) v.findViewById(R.id.artist_name)).setText(artistName.get(position));
 
 
             v.setOnClickListener(new View.OnClickListener() {
@@ -265,3 +272,6 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
         }
     }
 }
+
+
+
