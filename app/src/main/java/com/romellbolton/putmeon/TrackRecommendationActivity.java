@@ -170,10 +170,16 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     public void setUpData(ArrayList<Track> trackArrayList) {
         // TODO: Use returned tracklist and set up in Card stack to swipe left and right on track
         // TODO: When swiped right, save track to shared preferences, when swiped left, do nothing
-        // TODO: Set up Track Adapter screen with list of all favorited songs, allow users to play 30 second clips of it
+        // TODO: Set up Track Adapter screen with list of all favorite songs, allow users to play 30 second clips of it
+        // TODO: Set up Player Activity to play a selected track for 30 seconds
+        // TODO: Set up Favorites / List View Activity displaying the saved tracks being loaded from Shared Prefs
+        // TODO: When clicked on a track on the favorites screen, or on track recommendation, navigate to player Activity and
+        // let user play 30 seconds of the selected track
         // TODO: Access favorites list by way of a menu button
-        // TODO: Add track image, track name, album name, etc
-        // TODO: Eventually, when track is clicked, let user play it using Spotify's API
+        // TODO: Add track image, track name, album name, etc to TrackRecommendation screen
+        // TODO: Implement refresh button for user to get more tracks from a different random artist
+        // TODO: Set an appropriate JSON return limit for the track recommendation screen
+        // TODO: Eventually, when track is clicked, let user play it using Spotify's API (Very very last implementation)
     }
 
     public class SwipeDeckAdapter extends BaseAdapter {
