@@ -47,6 +47,8 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     private ArrayList<String> songNames = new ArrayList<>();
     private ArrayList<String> artistName = new ArrayList<>();
     private ArrayList<String> albumImgURL = new ArrayList<>();
+//    Integer[] images = new Integer[]{R.drawable.image1, R.drawable.image2....}; // Provide 6 Images or it will crash saying null pointer exception
+    private ArrayList<Integer> loadImage = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,10 +217,12 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
     public class SwipeDeckAdapter extends BaseAdapter {
 
         private List<String> data;
+//        private List<String> data;
         private Context context;
 
         public SwipeDeckAdapter(List<String> data, Context context) {
             this.data = data;
+//            this.Images = listImages;
             this.context = context;
         }
 
@@ -246,7 +250,8 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
                 // normally use a viewholder
                 v = inflater.inflate(R.layout.track_card_view, parent, false);
             }
-            ((TextView) v.findViewById(R.id.textView2)).setText(data.get(position));
+            ((TextView) v.findViewById(R.id.song_name)).setText(data.get(position));
+
 
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
