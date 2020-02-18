@@ -109,7 +109,7 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
                         Log.e("TAG" , jsonObject.toString());
                         mUsersRandomTopArtistList = getArtists(jsonObject);
                         Random random = new Random();
-                        randomArtist = mUsersRandomTopArtistList.get(random.nextInt(mUsersRandomTopArtistList.size())).artist_name;
+                        randomArtist = mUsersRandomTopArtistList.get(random.nextInt(mUsersRandomTopArtistList.size())).artistName;
                         setResponse(randomArtist);
                         Toast.makeText(getApplicationContext() , "DONE", Toast.LENGTH_SHORT).show();
                     } catch (JSONException e) {
@@ -146,8 +146,8 @@ public class TrackRecommendationActivity extends AppCompatActivity implements Tr
 
                     TopTrack track_object = new TopTrack(artist_name);
                     mUsersRandomTopArtistList.add(track_object); //to be used in Ui later
-                    Toast.makeText(this, mUsersRandomTopArtistList.get(0).artist_name, Toast.LENGTH_SHORT).show();
-                    Log.i("MainActivity", mUsersRandomTopArtistList.get(0).artist_name);
+                    Toast.makeText(this, mUsersRandomTopArtistList.get(0).artistName, Toast.LENGTH_SHORT).show();
+                    Log.i("MainActivity", mUsersRandomTopArtistList.get(0).artistName);
                 }
 
             } catch (JSONException e) {

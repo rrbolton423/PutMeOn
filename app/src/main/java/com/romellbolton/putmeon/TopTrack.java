@@ -2,11 +2,11 @@ package com.romellbolton.putmeon;
 
 public class TopTrack {
 
-    public String artist_name;
+    public String artistName;
 
     public TopTrack() { }
 
     public TopTrack(String artist) {
-        this.artist_name = artist_name;
+        this.artistName = artistName;
     }
 }
