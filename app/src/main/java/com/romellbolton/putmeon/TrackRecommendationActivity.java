@@ -25,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -107,11 +108,11 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                     try
                     {
 
-                        if (adapter.artistName != null) {
-                            tracks = null;
-                            adapter.artistName.clear();
-                            adapter.notifyDataSetChanged();
-                        }
+                        tracks = null;
+                        songNames.clear();
+                        artistNames.clear();
+                        albumImgURLs.clear();
+                        adapter.notifyDataSetChanged();
 
                         final JSONObject jsonObject = new JSONObject(response.body().string());
 
@@ -120,11 +121,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                         randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).artistID;
                         randomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).trackID;
                         tracks = recommendationsOnSeed(randomArtistID, randomTrackID);
-
-
-
-                        songNames.clear();
-                        artistNames.clear();
+                        Collections.shuffle(tracks);
 
                         for(int i = 0; i < tracks.size(); i++)
                         {
