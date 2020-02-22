@@ -2,8 +2,10 @@ package com.romellbolton.putmeon;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.FragmentManager;
+
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -229,18 +232,21 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     }
 
     public void respondToSong(String url, String image, String songName, String albumName,String artistName) {
+//        Intent intent = new Intent(this, SpotifyTrackActivity.class);
+//        intent.putExtra(PlaybackScreenFragment.SONG_URL, url);
+//        intent.putExtra(PlaybackScreenFragment.IMAGE_URL, image);
+//        intent.putExtra(PlaybackScreenFragment.SONG_NAME, songName);
+//        intent.putExtra(PlaybackScreenFragment.ALBUM_NAME, albumName);
+//        intent.putExtra(PlaybackScreenFragment.ARTIST_NAME,artistName);
+//        startActivity(intent);
 
-            Bundle args = new Bundle();
-            args.putString(PlaybackScreenFragment.SONG_URL, url);
-            args.putString(PlaybackScreenFragment.IMAGE_URL, image);
-            args.putString(PlaybackScreenFragment.SONG_NAME, songName);
-            args.putString(PlaybackScreenFragment.ALBUM_NAME, albumName);
-            args.putString(PlaybackScreenFragment.ARTIST_NAME,artistName);
-            PlaybackScreenFragment fragment = new PlaybackScreenFragment();
-            fragment.setArguments(args);
-            FragmentManager manager = getFragmentManager();
-            fragment.show(manager, "Playback Fragment");
+        if (url == null) {
+            Toast.makeText(this, "No Preview Available", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        Intent intent = SpotifyTrackActivity.newIntent(this, new Track(artistName, songName, null, image, null, null, url));
+        startActivity(intent);
     }
 
     @Override
@@ -321,7 +327,8 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             String CoverURL64x64 = tmpImageArr.getJSONObject(2).getString("url");
 
             String songID = (String) recs.getJSONObject(i).getString("id");
-            String songURL = (String) recs.getJSONObject(i).getString("href");
+            String songURL = (String) recs.getJSONObject(i).getString("preview_url");
+            Log.d("PREVIEWURL", "recommendationsOnSeed: " + songURL);
 
             recommendedList.add(new Track(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID, songURL));
         }

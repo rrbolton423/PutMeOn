@@ -3,7 +3,9 @@ package com.romellbolton.putmeon;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Track
+import java.io.Serializable;
+
+public class Track implements Serializable
 {
     private String artist;
     private String name;
