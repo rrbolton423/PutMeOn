@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
                 AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
                         AuthenticationResponse.Type.TOKEN,
                         REDIRECT_URI);
-                builder.setScopes(new String[]{"streaming", "user-read-private", "playlist-modify-public"});
+                builder.setScopes(new String[]{"streaming", "user-read-recently-played", "playlist-modify-public"});
                 AuthenticationRequest request = builder.build();
                 AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
             }

@@ -3,108 +3,175 @@ package com.romellbolton.putmeon;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Track implements Parcelable {
-    String name;
-    String artist;
-    String url;
-    String smallImageURL;
-    String largeImageURL;
-    String mbid;
+public class Track
+{
+    private String artist;
+    private String name;
+    private String CoverURL64x64;
+    private String CoverURL640x636;
+    private String artistID;
+    private String SongID;
+    private float sim;
 
-    public Track() { }
-
-    public Track(Parcel in) {
-        this.name = in.readString();
-        this.artist = in.readString();
-        this.url = in.readString();
-        this.smallImageURL = in.readString();
-        this.largeImageURL = in.readString();
-        this.mbid = in.readString();
+    /**
+     *
+     * @param artist
+     * @param name
+     * @param CoverURL64x64
+     * @param CoverURL640x636
+     * @param artistID
+     * @param SongID
+     */
+    public Track(String artist, String name, String CoverURL64x64, String CoverURL640x636, String artistID, String SongID)
+    {
+        this.artist = artist;
+        this.name = name;
+        this.CoverURL64x64 = CoverURL64x64;
+        this.CoverURL640x636 = CoverURL640x636;
+        this.artistID = artistID;
+        this.SongID = SongID;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    /**
+     *
+     * @param artist
+     * @param name
+     */
+    public Track(String artist, String name)
+    {
+        this.artist = artist;
         this.name = name;
     }
 
-    public String getArtist() {
+    /**
+     *
+     * @return float
+     */
+    public float getSim()
+    {
+        return sim;
+    }
+
+    /**
+     *
+     * @param sim
+     */
+    public void setSim(float sim)
+    {
+        this.sim = sim;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getArtist()
+    {
         return artist;
     }
 
-    public void setArtist(String artist) {
+    /**
+     *
+     * @param artist
+     */
+    public void setArtist(String artist)
+    {
         this.artist = artist;
     }
 
-    public String getUrl() {
-        return url;
+    /**
+     *
+     * @return String
+     */
+    public String getName()
+    {
+        return name;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    /**
+     *
+     * @param name
+     */
+    public void setName(String name)
+    {
+        this.name = name;
     }
 
-    public String getSmallImageURL() {
-        return smallImageURL;
+    /**
+     *
+     * @return String
+     */
+    public String getCoverURL64x64()
+    {
+        return CoverURL64x64;
     }
 
-    public void setSmallImageURL(String smallImageURL) {
-        this.smallImageURL = smallImageURL;
+    /**
+     *
+     * @param CoverURL64x64
+     */
+    public void setCoverURL64x64(String CoverURL64x64)
+    {
+        this.CoverURL64x64 = CoverURL64x64;
     }
 
-    public String getLargeImageURL() {
-        return largeImageURL;
+    /**
+     *
+     * @return String
+     */
+    public String getCoverURL640x636()
+    {
+        return CoverURL640x636;
     }
 
-    public void setLargeImageURL(String largeImageURL) {
-        this.largeImageURL = largeImageURL;
+    /**
+     *
+     * @param CoverURL640x636
+     */
+    public void setCoverURL640x636(String CoverURL640x636)
+    {
+        this.CoverURL640x636 = CoverURL640x636;
     }
 
-    public String getMbid() {
-        return mbid;
+    /**
+     *
+     * @return String
+     */
+    public String getArtistID()
+    {
+        return artistID;
     }
 
-    public void setMbid(String mbid) {
-        this.mbid = mbid;
+    /**
+     *
+     * @param artistID
+     */
+    public void setArtistID(String artistID)
+    {
+        this.artistID = artistID;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getSongID()
+    {
+        return SongID;
+    }
+
+    /**
+     *
+     * @param SongID
+     */
+    public void setSongID(String SongID)
+    {
+        this.SongID = SongID;
     }
 
     @Override
-    public String toString() {
-        String stTrack = "{" +
-                "\"name\":\"" + this.name + "\"," +
-                "\"artist\":\"" + this.artist + "\"," +
-                "\"url\":\"" + this.url + "\"," +
-                "\"smallImageURL\":\"" + this.smallImageURL + "\"," +
-                "\"largeImageURL\":\"" + this.largeImageURL + "\"," +
-                "\"mbid\":\"" + this.mbid + "\"}";
-
-        return stTrack;
+    public String toString()
+    {
+        return "Track{" + "artist=" + artist + ", name=" + name + ", CoverURL64x64=" + CoverURL64x64 + ", CoverURL640x636=" + CoverURL640x636 + ", artistID=" + artistID + ", SongID=" + SongID + '}';
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeString(artist);
-        parcel.writeString(url);
-        parcel.writeString(smallImageURL);
-        parcel.writeString(largeImageURL);
-        parcel.writeString(mbid);
-
-    }
-    public static final Parcelable.Creator<Track> CREATOR = new Parcelable.Creator<Track>() {
-        public Track createFromParcel(Parcel in) {
-            return new Track(in);
-        }
-
-        public Track[] newArray(int size) {
-            return new Track[size];
-        }
-    };
 }
