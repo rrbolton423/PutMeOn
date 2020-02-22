@@ -240,13 +240,12 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 //        intent.putExtra(PlaybackScreenFragment.ARTIST_NAME,artistName);
 //        startActivity(intent);
 
-        if (url == null) {
-            Toast.makeText(this, "No Preview Available", Toast.LENGTH_SHORT).show();
-            return;
+        if (url.contains("null")) {
+            Toast.makeText(this, "No Preview Available", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = SpotifyTrackActivity.newIntent(this, new Track(artistName, songName, null, image, null, null, url));
+            startActivity(intent);
         }
-
-        Intent intent = SpotifyTrackActivity.newIntent(this, new Track(artistName, songName, null, image, null, null, url));
-        startActivity(intent);
     }
 
     @Override
