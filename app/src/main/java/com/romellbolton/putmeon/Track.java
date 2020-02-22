@@ -12,6 +12,15 @@ public class Track
     private String artistID;
     private String SongID;
     private float sim;
+    private String uri;
+
+    public String getURL() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
     /**
      *
@@ -22,7 +31,7 @@ public class Track
      * @param artistID
      * @param SongID
      */
-    public Track(String artist, String name, String CoverURL64x64, String CoverURL640x636, String artistID, String SongID)
+    public Track(String artist, String name, String CoverURL64x64, String CoverURL640x636, String artistID, String SongID, String uri)
     {
         this.artist = artist;
         this.name = name;
@@ -30,6 +39,7 @@ public class Track
         this.CoverURL640x636 = CoverURL640x636;
         this.artistID = artistID;
         this.SongID = SongID;
+        this.uri = uri;
     }
 
     /**
@@ -41,6 +51,11 @@ public class Track
     {
         this.artist = artist;
         this.name = name;
+    }
+
+    public Track()
+    {
+
     }
 
     /**

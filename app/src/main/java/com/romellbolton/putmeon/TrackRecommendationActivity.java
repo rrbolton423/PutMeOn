@@ -2,6 +2,7 @@ package com.romellbolton.putmeon;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +16,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,6 +59,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     private ArrayList<String> artistNames = new ArrayList<>();
     private ArrayList<String> songNames = new ArrayList<>();
     private ArrayList<String> albumImgURLs = new ArrayList<>();
+    private ArrayList<String> albumURLs = new ArrayList<>();
     private String prefName = "myFavoritesStorage";
     public String currentArtist;
     public String currentSong;
@@ -112,6 +113,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                         songNames.clear();
                         artistNames.clear();
                         albumImgURLs.clear();
+                        albumURLs.clear();
                         adapter.notifyDataSetChanged();
 
                         final JSONObject jsonObject = new JSONObject(response.body().string());
@@ -128,6 +130,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                             songNames.add(tracks.get(i).getName());
                             artistNames.add(tracks.get(i).getArtist());
                             albumImgURLs.add(tracks.get(i).getCoverURL640x636());
+                            albumURLs.add(tracks.get(i).getURL());
 //            cardStack.setLeftImage(R.id.left_image);
                         }
 
@@ -225,6 +228,21 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         return mUsersRecentArtist;
     }
 
+    public void respondToSong(String url, String image, String songName, String albumName,String artistName) {
+
+            Bundle args = new Bundle();
+            args.putString(PlaybackScreenFragment.SONG_URL, url);
+            args.putString(PlaybackScreenFragment.IMAGE_URL, image);
+            args.putString(PlaybackScreenFragment.SONG_NAME, songName);
+            args.putString(PlaybackScreenFragment.ALBUM_NAME, albumName);
+            args.putString(PlaybackScreenFragment.ARTIST_NAME,artistName);
+            PlaybackScreenFragment fragment = new PlaybackScreenFragment();
+            fragment.setArguments(args);
+            FragmentManager manager = getFragmentManager();
+            fragment.show(manager, "Playback Fragment");
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater findMenuItems = getMenuInflater();
@@ -303,12 +321,12 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             String CoverURL64x64 = tmpImageArr.getJSONObject(2).getString("url");
 
             String songID = (String) recs.getJSONObject(i).getString("id");
+            String songURL = (String) recs.getJSONObject(i).getString("href");
 
-            recommendedList.add(new Track(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID));
+            recommendedList.add(new Track(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID, songURL));
         }
         return recommendedList;
 
-        // TODO: Use returned tracklist and set up in Card stack to swipe left and right on track
         // TODO: When swiped right, save track to shared preferences, when swiped left, do nothing
         // TODO: Set up Track Adapter screen with list of all favorite songs, allow users to play 30 second clips of it
         // TODO: Set up Player Activity to play a selected track for 30 seconds
@@ -316,9 +334,10 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         // TODO: When clicked on a track on the favorites screen, or on track recommendation, navigate to player Activity and
         // let user play 30 seconds of the selected track
         // TODO: Access favorites list by way of a menu button
-        // TODO: Add track image, track name, album name, etc to TrackRecommendation screen
-        // TODO: Set an appropriate JSON return limit for the track recommendation screen
         // TODO: Eventually, when track is clicked, let user play it using Spotify's API (Very very last implementation)
+
+
+
     }
 
 
@@ -373,8 +392,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String item = (String)getItem(position);
-                    Log.i("MainActivity", item);
+                    respondToSong(albumURLs.get(position), albumImgURLs.get(position), songNames.get(position), "", artistName.get(position));
                 }
             });
 
