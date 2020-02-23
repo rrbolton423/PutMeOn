@@ -233,7 +233,7 @@ public class SpotifyTrackFragment extends Fragment {
             bootstrapPlayer();
 
             mPreviewURL = iURL;
-//            showNowPlayingNotification(mSpotifyTrack);
+            showNowPlayingNotification(mSpotifyTrack);
             mProgressDialog.dismiss();
         }
 
@@ -270,20 +270,20 @@ public class SpotifyTrackFragment extends Fragment {
             }
         }
 
-//        // shows the notification
-//        private void showNowPlayingNotification(Track track) {
-//
-//            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
-//                    new NotificationCompat.Builder(getContext())
-//                            .setSmallIcon(android.R.drawable.ic_media_play)
-//                            .setContentTitle("Now Playing")
-//                            .setContentText(track.getName() + " by " + aName);
-//
-//            // content intent should be a new, empty one - when tapped in Notification Center, nothing happens (intended)
-//            mBuilder.setContentIntent(PendingIntent.getActivity(getContext(), 0, new Intent(), 0));
-//            NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//            mNotificationManager.notify(NOW_PLAYING_ID, mBuilder.build());
-//        }
+        // shows the notification
+        private void showNowPlayingNotification(Track track) {
+
+            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
+                    new NotificationCompat.Builder(getContext())
+                            .setSmallIcon(android.R.drawable.ic_media_play)
+                            .setContentTitle("Now Playing")
+                            .setContentText(tName + " by " + aName);
+
+            // content intent should be a new, empty one - when tapped in Notification Center, nothing happens (intended)
+            mBuilder.setContentIntent(PendingIntent.getActivity(getContext(), 0, new Intent(), 0));
+            NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            mNotificationManager.notify(NOW_PLAYING_ID, mBuilder.build());
+        }
     }
 }

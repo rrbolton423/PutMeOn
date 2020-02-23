@@ -338,7 +338,6 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         // TODO: Set up Favorites / List View Activity displaying the saved tracks being loaded from Shared Prefs
         // TODO: Access favorites list by way of a menu button
         // TODO: Add Floating Action Button???
-        // TODO: Add App logo
         // TODO: Handle internet connectivity
         // TODO: Notify user which song is playing
         // TODO: Refactor code, delete unnecessary code, commented out code, log statements, clean up and indent files
