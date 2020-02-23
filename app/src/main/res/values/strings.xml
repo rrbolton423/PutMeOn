@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PutMeOn</string>
+    <string name="app_name">Put Me On</string>
     <string name="new_suggestions">New Suggestions</string>
     <string name="listen_feed_activity_title">Listen Feed</string>
     <string name="view_feed">View Listen Feed</string>
