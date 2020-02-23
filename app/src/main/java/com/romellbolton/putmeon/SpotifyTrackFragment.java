@@ -233,7 +233,6 @@ public class SpotifyTrackFragment extends Fragment {
             bootstrapPlayer();
 
             mPreviewURL = iURL;
-            showNowPlayingNotification(mSpotifyTrack);
             mProgressDialog.dismiss();
         }
 
@@ -268,22 +267,6 @@ public class SpotifyTrackFragment extends Fragment {
             catch (IOException ioe) {
                 Log.e(TAG, "Unable to play track", ioe);
             }
-        }
-
-        // shows the notification
-        private void showNowPlayingNotification(Track track) {
-
-            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
-                    new NotificationCompat.Builder(getContext())
-                            .setSmallIcon(android.R.drawable.ic_media_play)
-                            .setContentTitle("Now Playing")
-                            .setContentText(tName + " by " + aName);
-
-            // content intent should be a new, empty one - when tapped in Notification Center, nothing happens (intended)
-            mBuilder.setContentIntent(PendingIntent.getActivity(getContext(), 0, new Intent(), 0));
-            NotificationManager mNotificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-
-            mNotificationManager.notify(NOW_PLAYING_ID, mBuilder.build());
         }
     }
 }

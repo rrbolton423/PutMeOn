@@ -241,7 +241,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 //        startActivity(intent);
 
         if (url.contains("null")) {
-            Toast.makeText(this, "No Preview Available", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No Preview Available", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = SpotifyTrackActivity.newIntent(this, new Track(artistName, songName, null, image, null, null, url));
             startActivity(intent);
@@ -339,10 +339,9 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         // TODO: Access favorites list by way of a menu button
         // TODO: Add Floating Action Button???
         // TODO: Handle internet connectivity
-        // TODO: Notify user which song is playing
         // TODO: Refactor code, delete unnecessary code, commented out code, log statements, clean up and indent files
         // TODO: Organize code files into their own folders
-        // TODO: Add code allowing user to logout and allow a new user to log in
+        // TODO: Add code allowing user to logout and allow a new user to log in???
     }
 
 
