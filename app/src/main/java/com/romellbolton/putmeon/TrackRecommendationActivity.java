@@ -335,15 +335,10 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
         // TODO: When swiped right, save track to shared preferences, when swiped left, do nothing
         // TODO: Set up Track Adapter screen with list of all favorite songs, allow users to play 30 second clips of it
-        // TODO: Set up Player Activity to play a selected track for 30 seconds
         // TODO: Set up Favorites / List View Activity displaying the saved tracks being loaded from Shared Prefs
-        // TODO: When clicked on a track on the favorites screen, or on track recommendation, navigate to player Activity and
-        // let user play 30 seconds of the selected track
         // TODO: Access favorites list by way of a menu button
-        // TODO: Eventually, when track is clicked, let user play it using Spotify's API (Very very last implementation)
-
-
-
+        // TODO: Floating Action Button?
+        // TODO: Add App logo
     }
 
 
