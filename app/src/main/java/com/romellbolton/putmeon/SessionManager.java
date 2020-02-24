@@ -3,7 +3,6 @@ package com.romellbolton.putmeon;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 
 
 import java.util.HashMap;

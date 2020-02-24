@@ -20,7 +20,6 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
         if(fragment == null) {
             fragment = createFragment();
-            // fragment transaction
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
                     .commit();

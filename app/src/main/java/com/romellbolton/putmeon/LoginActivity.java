@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import com.spotify.sdk.android.authentication.AuthenticationClient;
@@ -28,16 +27,13 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton;
 
         loginButton = (findViewById(R.id.action_login));
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                        AuthenticationResponse.Type.TOKEN,
-                        REDIRECT_URI);
-                builder.setScopes(new String[]{"streaming", "user-read-recently-played", "playlist-modify-public"});
-                AuthenticationRequest request = builder.build();
-                AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
-            }
+        loginButton.setOnClickListener(v -> {
+            AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+                    AuthenticationResponse.Type.TOKEN,
+                    REDIRECT_URI);
+            builder.setScopes(new String[]{"streaming", "user-read-recently-played", "playlist-modify-public"});
+            AuthenticationRequest request = builder.build();
+            AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
         });
     }
 
