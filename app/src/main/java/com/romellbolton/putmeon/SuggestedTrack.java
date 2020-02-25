@@ -2,8 +2,7 @@ package com.romellbolton.putmeon;
 
 import java.io.Serializable;
 
-public class SuggestedTrack implements Serializable
-{
+public class SuggestedTrack implements Serializable {
     private String artist;
     private String name;
     private String CoverURL64x64;
@@ -31,57 +30,48 @@ public class SuggestedTrack implements Serializable
         this.uri = uri;
     }
 
-    public SuggestedTrack(String artist, String name)
-    {
+    public SuggestedTrack(String artist, String name) {
         this.artist = artist;
         this.name = name;
     }
 
-    public SuggestedTrack() { }
+    public SuggestedTrack() {
+    }
 
 
-    public float getSim()
-    {
+    public float getSim() {
         return sim;
     }
 
-    public void setSim(float sim)
-    {
+    public void setSim(float sim) {
         this.sim = sim;
     }
 
-    public String getArtist()
-    {
+    public String getArtist() {
         return artist;
     }
 
-    public void setArtist(String artist)
-    {
+    public void setArtist(String artist) {
         this.artist = artist;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getCoverURL64x64()
-    {
+    public String getCoverURL64x64() {
         return CoverURL64x64;
     }
 
-    public void setCoverURL64x64(String CoverURL64x64)
-    {
+    public void setCoverURL64x64(String CoverURL64x64) {
         this.CoverURL64x64 = CoverURL64x64;
     }
 
-    public String getCoverURL640x636()
-    {
+    public String getCoverURL640x636() {
         return CoverURL640x636;
     }
 
@@ -89,23 +79,19 @@ public class SuggestedTrack implements Serializable
         this.CoverURL640x636 = CoverURL640x636;
     }
 
-    public String getArtistID()
-    {
+    public String getArtistID() {
         return artistID;
     }
 
-    public void setArtistID(String artistID)
-    {
+    public void setArtistID(String artistID) {
         this.artistID = artistID;
     }
 
-    public String getSongID()
-    {
+    public String getSongID() {
         return SongID;
     }
 
-    public void setSongID(String SongID)
-    {
+    public void setSongID(String SongID) {
         this.SongID = SongID;
     }
 

@@ -76,7 +76,7 @@ public class SpotifyTrackFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mMediaPlayer != null) {
+        if (mMediaPlayer != null) {
             mMediaPlayer.stop();
         }
     }
@@ -91,7 +91,7 @@ public class SpotifyTrackFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             int position = savedInstanceState.getInt(TRACK_POSITION);
             Log.i(TAG, "Position now after rotate: " + position);
             mMediaPlayer.seekTo(position);
@@ -101,7 +101,7 @@ public class SpotifyTrackFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             int position = savedInstanceState.getInt(TRACK_POSITION);
             mMediaPlayer.seekTo(position);
         }
@@ -118,7 +118,7 @@ public class SpotifyTrackFragment extends Fragment {
 
         mPauseButton = v.findViewById(R.id.spotify_track_playing_button_pause);
         mPauseButton.setOnClickListener(v1 -> {
-            if(mMediaPlayer.isPlaying()) {
+            if (mMediaPlayer.isPlaying()) {
                 mPauseButton.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 mMediaPlayer.pause();
             } else {
@@ -166,7 +166,7 @@ public class SpotifyTrackFragment extends Fragment {
         protected Bitmap doInBackground(Void... params) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
 
-            if(mSpotifySuggestedTrack != null) {
+            if (mSpotifySuggestedTrack != null) {
                 String imageURL = mSpotifySuggestedTrack.getCoverURL640x636();
                 try {
                     InputStream input = new java.net.URL(imageURL).openStream();
@@ -201,8 +201,7 @@ public class SpotifyTrackFragment extends Fragment {
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
                 Toast.makeText(getContext(), "Now playing " + mTrackName + " by " + mArtistName, Toast.LENGTH_SHORT).show();
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
                 Log.e(TAG, "Unable to play track", ioe);
             }
         }

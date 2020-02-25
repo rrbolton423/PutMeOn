@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-
 import java.util.HashMap;
 
 public class SessionManager {
@@ -17,9 +16,10 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String CLIENT_ID = "8740928683fe4ab6be03091a875ac618";
 
-    public SessionManager() { }
+    public SessionManager() {
+    }
 
-    public void createLoginSession (Context context, String apiUserName){
+    public void createLoginSession(Context context, String apiUserName) {
         this.context = context;
         PREF_NAME = apiUserName;
         pref = context.getSharedPreferences(PREF_NAME, Context.MODE_MULTI_PROCESS | PRIVATE_MODE);
@@ -30,18 +30,22 @@ public class SessionManager {
         editor.commit();
     }
 
-    public String getToken () {return PREF_NAME;}
+    public String getToken() {
+        return PREF_NAME;
+    }
 
-    public HashMap<String, String> getUserDetails(){
+    public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
         user.put("id", pref.getString("id", null));
         return user;
     }
 
-    public String getClientId () { return CLIENT_ID;}
+    public String getClientId() {
+        return CLIENT_ID;
+    }
 
-    public void checkLogin(){
-        if(!this.isLoggedIn()){
+    public void checkLogin() {
+        if (!this.isLoggedIn()) {
             Intent i = new Intent(context, LoginActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -49,15 +53,15 @@ public class SessionManager {
         }
     }
 
-    public String getPrefName (){
+    public String getPrefName() {
         return PREF_NAME;
     }
 
-    public boolean isLoggedIn(){
+    public boolean isLoggedIn() {
         return pref.getBoolean(IS_LOGIN, false);
     }
 
-    public void logoutUser(){
+    public void logoutUser() {
         editor.clear();
         editor.commit();
         Intent i = new Intent(context, LoginActivity.class);

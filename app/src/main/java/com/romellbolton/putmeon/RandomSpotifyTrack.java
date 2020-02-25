@@ -7,7 +7,8 @@ public class RandomSpotifyTrack {
     public String trackID;
     public String artistID;
 
-    public RandomSpotifyTrack() {}
+    public RandomSpotifyTrack() {
+    }
 
     public RandomSpotifyTrack(String trackName, String artistName, String trackID, String artistID) {
         this.trackName = trackName;
