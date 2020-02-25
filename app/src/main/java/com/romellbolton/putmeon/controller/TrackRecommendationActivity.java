@@ -218,6 +218,8 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.favorites:
                 break;
+            case R.id.home:
+                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
