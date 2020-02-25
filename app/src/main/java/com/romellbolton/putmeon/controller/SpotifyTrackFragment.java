@@ -1,4 +1,4 @@
-package com.romellbolton.putmeon;
+package com.romellbolton.putmeon.controller;
 
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -22,6 +22,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.romellbolton.putmeon.R;
+import com.romellbolton.putmeon.model.SuggestedTrack;
+import com.romellbolton.putmeon.util.AppStatus;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -70,7 +73,11 @@ public class SpotifyTrackFragment extends Fragment {
         mPreviewURL = mSpotifySuggestedTrack.getURL();
         imageURL = mSpotifySuggestedTrack.getCoverURL640x636();
 
-        new DownloadImage().execute();
+        if (AppStatus.getInstance(getContext()).isOnline()) {
+            new DownloadImage().execute();
+        } else {
+            Toast.makeText(getContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

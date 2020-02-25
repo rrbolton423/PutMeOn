@@ -9,4 +9,10 @@
     <string name="feed_clear">Clear Feed</string>
     <string name="message_currently_listening_to">
         I\'m currently listening to %1$s by %2$s. Thought you might like it!  Click this link to listen to its preview: %3$s</string>
+    <string name="spotify_track_playing_image_content_description">Displays image of the currently playing Spotify track.</string>
+    <string name="maroon_5">Maroon 5</string>
+    <string name="what_lovers_do_feat_sza">What Lovers Do (feat. SZA)</string>
+    <string name="song_image_content_description">ImageView displays the cover art of the song</string>
+    <string name="login">LOGIN</string>
+    <string name="app_logo_imageView_content_description">Image View displays the Put Me On app logo</string>
 </resources>

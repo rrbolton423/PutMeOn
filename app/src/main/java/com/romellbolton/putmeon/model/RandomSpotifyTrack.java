@@ -1,4 +1,4 @@
-package com.romellbolton.putmeon;
+package com.romellbolton.putmeon.model;
 
 public class RandomSpotifyTrack {
 

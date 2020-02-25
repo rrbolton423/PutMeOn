@@ -1,8 +1,10 @@
-package com.romellbolton.putmeon;
+package com.romellbolton.putmeon.util;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.romellbolton.putmeon.controller.LoginActivity;
 
 import java.util.HashMap;
 

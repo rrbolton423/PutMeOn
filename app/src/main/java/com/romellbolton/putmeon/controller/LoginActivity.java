@@ -1,4 +1,4 @@
-package com.romellbolton.putmeon;
+package com.romellbolton.putmeon.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.romellbolton.putmeon.R;
+import com.romellbolton.putmeon.util.AppStatus;
+import com.romellbolton.putmeon.util.SessionManager;
 import com.spotify.sdk.android.authentication.AuthenticationClient;
 import com.spotify.sdk.android.authentication.AuthenticationRequest;
 import com.spotify.sdk.android.authentication.AuthenticationResponse;
@@ -28,12 +32,16 @@ public class LoginActivity extends AppCompatActivity {
 
         loginButton = (findViewById(R.id.action_login));
         loginButton.setOnClickListener(v -> {
-            AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                    AuthenticationResponse.Type.TOKEN,
-                    REDIRECT_URI);
-            builder.setScopes(new String[]{"streaming", "user-read-recently-played", "playlist-modify-public"});
-            AuthenticationRequest request = builder.build();
-            AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
+            if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
+                AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
+                        AuthenticationResponse.Type.TOKEN,
+                        REDIRECT_URI);
+                builder.setScopes(new String[]{"streaming", "user-read-recently-played", "playlist-modify-public"});
+                AuthenticationRequest request = builder.build();
+                AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
+            } else {
+                Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 

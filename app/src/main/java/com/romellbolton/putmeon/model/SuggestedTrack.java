@@ -1,4 +1,4 @@
-package com.romellbolton.putmeon;
+package com.romellbolton.putmeon.model;
 
 import java.io.Serializable;
 
@@ -37,7 +37,6 @@ public class SuggestedTrack implements Serializable {
 
     public SuggestedTrack() {
     }
-
 
     public float getSim() {
         return sim;

@@ -1,4 +1,4 @@
-package com.romellbolton.putmeon;
+package com.romellbolton.putmeon.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +32,10 @@ import java.util.Random;
 
 import com.bumptech.glide.Glide;
 import com.daprlabs.cardstack.SwipeDeck;
+import com.romellbolton.putmeon.R;
+import com.romellbolton.putmeon.model.RandomSpotifyTrack;
+import com.romellbolton.putmeon.model.SuggestedTrack;
+import com.romellbolton.putmeon.util.AppStatus;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -73,7 +76,12 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         cardStack = findViewById(R.id.swipe_deck);
         newSuggestionButton = findViewById(R.id.new_suggestions_button);
         newSuggestionButton.setOnClickListener(v -> fetchRandomFavoriteSpotifyArtist());
-        fetchRandomFavoriteSpotifyArtist();
+
+        if (AppStatus.getInstance(this).isOnline()) {
+            fetchRandomFavoriteSpotifyArtist();
+        } else {
+            Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cancelCall() {
@@ -214,7 +222,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public LinkedList<SuggestedTrack> recommendationsOnSeed(String randomArtistID, String randomTrackID) throws MalformedURLException, IOException, JSONException {
+    public LinkedList<SuggestedTrack> recommendationsOnSeed(String randomArtistID, String randomTrackID) throws IOException, JSONException {
         URL url = new URL("https://api.spotify.com/v1/recommendations?market=US&seed_artists="
                 + randomArtistID + "&seed_tracks=" + randomTrackID + "&min_energy=0.4&min_popularity=50");
         System.out.println("GetRecURL: " + url.toString());
@@ -266,20 +274,16 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             String CoverURL64x64 = tmpImageArr.getJSONObject(2).getString("url");
 
             String songID = recs.getJSONObject(i).getString("id");
-            String songURL = recs.getJSONObject(i).getString("preview_url");
+            String previewUrl = recs.getJSONObject(i).getString("preview_url");
 
-            recommendedList.add(new SuggestedTrack(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID, songURL));
+            recommendedList.add(new SuggestedTrack(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID, previewUrl));
         }
         return recommendedList;
 
         // TODO: When swiped right, save track to shared preferences, when swiped left, do nothing
         // TODO: Set up SuggestedTrack Adapter screen with list of all favorite songs, allow users to play 30 second clips of it
-        // TODO: Set up Favorites / List View Activity displaying the saved suggestedTracks being loaded from Shared Prefs
+        // TODO: Set up Favorites / List View Activity displaying the saved suggestedTracks being loaded from device storage
         // TODO: Access favorites list by way of a menu button
-        // TODO: Add Floating Action Button???
-        // TODO: Handle internet connectivity
-        // TODO: Organize code files into their own folders
-        // TODO: Add code allowing user to logout and allow a new user to log in???
     }
 
 
@@ -326,7 +330,13 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                     .load(albumImgURLs.get(position))
                     .into(((ImageView) v.findViewById(R.id.song_image)));
 
-            v.setOnClickListener(v1 -> respondToSong(albumURLs.get(position), albumImgURLs.get(position), songNames.get(position), "", artistName.get(position)));
+            v.setOnClickListener(view -> {
+                if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
+                    respondToSong(albumURLs.get(position), albumImgURLs.get(position), songNames.get(position), null, artistName.get(position));
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                }
+            });
 
             return v;
         }

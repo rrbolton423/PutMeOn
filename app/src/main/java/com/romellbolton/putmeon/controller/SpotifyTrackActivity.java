@@ -1,10 +1,12 @@
-package com.romellbolton.putmeon;
+package com.romellbolton.putmeon.controller;
 
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
 
 import androidx.fragment.app.Fragment;
+
+import com.romellbolton.putmeon.model.SuggestedTrack;
 
 public class SpotifyTrackActivity extends SingleFragmentActivity {
 
