@@ -72,7 +72,6 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_recommendation);
 
         accessToken = getIntent().getStringExtra("accessToken");
-
         cardStack = findViewById(R.id.swipe_deck);
         newSuggestionButton = findViewById(R.id.new_suggestions_button);
         newSuggestionButton.setOnClickListener(v -> fetchRandomFavoriteSpotifyArtist());
@@ -171,7 +170,6 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     }
 
     public ArrayList<RandomSpotifyTrack> getArtists(JSONObject jsonObject) {
-
         if (jsonObject.has("items")) {
             try {
                 JSONArray jsonArray = jsonObject.getJSONArray("items");
