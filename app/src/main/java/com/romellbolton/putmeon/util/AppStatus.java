@@ -10,7 +10,6 @@ public class AppStatus {
     private static AppStatus instance = new AppStatus();
     static Context context;
     ConnectivityManager connectivityManager;
-    NetworkInfo wifiInfo, mobileInfo;
     boolean connected = false;
 
     public static AppStatus getInstance(Context ctx) {

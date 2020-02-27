@@ -251,7 +251,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
         BufferedReader br = new BufferedReader(streamReader);
         String inputLine;
-        StringBuffer str = new StringBuffer();
+        StringBuilder str = new StringBuilder();
         while ((inputLine = br.readLine()) != null) {
             str.append(inputLine);
         }
