@@ -74,12 +74,18 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         accessToken = getIntent().getStringExtra("accessToken");
         cardStack = findViewById(R.id.swipe_deck);
         newSuggestionButton = findViewById(R.id.new_suggestions_button);
-        newSuggestionButton.setOnClickListener(v -> fetchRandomFavoriteSpotifyArtist());
+        newSuggestionButton.setOnClickListener(view -> {
+            if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
+                fetchRandomFavoriteSpotifyArtist();
+            } else {
+                Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection", Toast.LENGTH_LONG).show();
+            }
+        });
 
         if (AppStatus.getInstance(this).isOnline()) {
             fetchRandomFavoriteSpotifyArtist();
         } else {
-            Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -197,7 +203,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
     public void respondToSong(String url, String image, String songName, String albumName, String artistName) {
         if (url.contains("null")) {
-            Toast.makeText(this, "No Preview Available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Preview Available", Toast.LENGTH_LONG).show();
         } else {
             Intent intent = SpotifyTrackActivity.newIntent(this, new SuggestedTrack(artistName, songName, null, image, null, null, url));
             startActivity(intent);
@@ -334,7 +340,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                 if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
                     respondToSong(albumURLs.get(position), albumImgURLs.get(position), songNames.get(position), null, artistName.get(position));
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection", Toast.LENGTH_LONG).show();
                 }
             });
 

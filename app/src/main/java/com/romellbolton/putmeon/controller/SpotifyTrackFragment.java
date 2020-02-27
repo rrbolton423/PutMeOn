@@ -30,6 +30,8 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 public class SpotifyTrackFragment extends Fragment {
     private static final String TAG = "SpotifyTrackFragment";
     private static final String TRACK_POSITION = "spotify_track_position";
@@ -76,7 +78,7 @@ public class SpotifyTrackFragment extends Fragment {
         if (AppStatus.getInstance(getContext()).isOnline()) {
             new DownloadImage().execute();
         } else {
-            Toast.makeText(getContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Please Check Your Internet Connection", LENGTH_LONG).show();
         }
     }
 
@@ -207,7 +209,7 @@ public class SpotifyTrackFragment extends Fragment {
                 mMediaPlayer.setDataSource(url);
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
-                Toast.makeText(getContext(), "Now playing " + mTrackName + " by " + mArtistName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Now playing " + mTrackName + " by " + mArtistName, LENGTH_LONG).show();
             } catch (IOException ioe) {
                 Log.e(TAG, "Unable to play track", ioe);
             }
