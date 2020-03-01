@@ -78,7 +78,7 @@ public class SpotifyTrackFragment extends Fragment {
         if (AppStatus.getInstance(getContext()).isOnline()) {
             new DownloadImage().execute();
         } else {
-            Toast.makeText(getContext(), "Please Check Your Internet Connection", LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
         }
     }
 
