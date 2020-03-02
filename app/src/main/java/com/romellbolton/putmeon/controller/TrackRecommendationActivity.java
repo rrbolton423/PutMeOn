@@ -49,6 +49,7 @@ import okhttp3.Request;
 
 public class TrackRecommendationActivity extends AppCompatActivity {
 
+    private static final String TAG = TrackRecommendationActivity.class.getSimpleName();
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private ArrayList<RandomSpotifyTrack> mUsersRecentArtist = new ArrayList<>();
     private LinkedList<SuggestedTrack> suggestedTracks = new LinkedList<>();
@@ -103,67 +104,74 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         cancelCall();
         call = mOkHttpClient.newCall(request);
         call.enqueue(new Callback() {
+
             @Override
             public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
                 try {
-                    suggestedTracks = null;
-                    songNames.clear();
-                    artistNames.clear();
-                    albumImgURLs.clear();
-                    albumURLs.clear();
-                    adapter.notifyDataSetChanged();
+                    if (response.isSuccessful()) {
+                        suggestedTracks = null;
+                        songNames.clear();
+                        artistNames.clear();
+                        albumImgURLs.clear();
+                        albumURLs.clear();
+                        adapter.notifyDataSetChanged();
 
-                    final JSONObject jsonObject = new JSONObject(response.body().string());
+                        final JSONObject jsonObject = new JSONObject(response.body().string());
 
-                    mUsersRecentArtist = getArtists(jsonObject);
-                    Random random = new Random();
-                    randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).artistID;
-                    randomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).trackID;
-                    suggestedTracks = recommendationsOnSeed(randomArtistID, randomTrackID);
-                    Collections.shuffle(suggestedTracks);
+                        mUsersRecentArtist = getArtists(jsonObject);
+                        Random random = new Random();
+                        randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).artistID;
+                        randomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).trackID;
+                        suggestedTracks = recommendationsOnSeed(randomArtistID, randomTrackID);
+                        Collections.shuffle(suggestedTracks);
 
-                    for (int i = 0; i < suggestedTracks.size(); i++) {
-                        songNames.add(suggestedTracks.get(i).getName());
-                        artistNames.add(suggestedTracks.get(i).getArtist());
-                        albumImgURLs.add(suggestedTracks.get(i).getCoverURL640x636());
-                        albumURLs.add(suggestedTracks.get(i).getURL());
+                        for (int i = 0; i < suggestedTracks.size(); i++) {
+                            songNames.add(suggestedTracks.get(i).getName());
+                            artistNames.add(suggestedTracks.get(i).getArtist());
+                            albumImgURLs.add(suggestedTracks.get(i).getCoverURL640x636());
+                            albumURLs.add(suggestedTracks.get(i).getURL());
+                        }
+
+                        runOnUiThread(() -> {
+                            adapter = new SwipeDeckAdapter(artistNames, getApplicationContext());
+                            cardStack.setAdapter(adapter);
+                        });
+
+
+                        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+                            @Override
+                            public void cardSwipedLeft(int position) {
+                                Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
+                            }
+
+                            @Override
+                            public void cardSwipedRight(int position) {
+                                Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
+                            }
+
+                            @Override
+                            public void cardsDepleted() {
+                                Log.i("MainActivity", "no more cards");
+                            }
+
+                            @Override
+                            public void cardActionDown() {
+
+                            }
+
+                            @Override
+                            public void cardActionUp() {
+
+                            }
+                        });
+
+                    } else {
+                        alertUserAboutError();
                     }
-
-                    runOnUiThread(() -> {
-                        adapter = new SwipeDeckAdapter(artistNames, getApplicationContext());
-                        cardStack.setAdapter(adapter);
-                    });
-
-
-                    cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
-                        @Override
-                        public void cardSwipedLeft(int position) {
-                            Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
-                        }
-
-                        @Override
-                        public void cardSwipedRight(int position) {
-                            Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
-                        }
-
-                        @Override
-                        public void cardsDepleted() {
-                            Log.i("MainActivity", "no more cards");
-                        }
-
-                        @Override
-                        public void cardActionDown() {
-
-                        }
-
-                        @Override
-                        public void cardActionUp() {
-
-                        }
-                    });
-
+                } catch (IOException e) {
+                    Log.e(TAG, "IO Exception caught: ", e);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "JSON Exception caught: ", e);
                 }
             }
 
@@ -173,6 +181,11 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                 Log.e("TAG", accessToken);
             }
         });
+    }
+
+    private void alertUserAboutError() {
+        AlertDialogFragment dialog = new AlertDialogFragment();
+        dialog.show(getFragmentManager(), "error_dialog");
     }
 
     public ArrayList<RandomSpotifyTrack> getArtists(JSONObject jsonObject) {
