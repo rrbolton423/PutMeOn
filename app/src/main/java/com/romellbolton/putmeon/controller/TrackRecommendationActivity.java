@@ -118,13 +118,14 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
                         final JSONObject jsonObject = new JSONObject(response.body().string());
 
+                        mUsersRecentArtist = getArtists(jsonObject);
                         if (mUsersRecentArtist.size() == 0) {
                             runOnUiThread(() -> {
                                 Toast.makeText(getApplicationContext(), "No Spotify Listening History", Toast.LENGTH_LONG).show();
                             });
                             return;
                         }
-                        mUsersRecentArtist = getArtists(jsonObject);
+
                         Random random = new Random();
                         randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).artistID;
                         randomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).trackID;
