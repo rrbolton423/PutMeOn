@@ -106,7 +106,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
 
             @Override
-            public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) throws IOException {
+            public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) {
                 try {
                     if (response.isSuccessful()) {
                         suggestedTracks = null;
@@ -118,6 +118,12 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
                         final JSONObject jsonObject = new JSONObject(response.body().string());
 
+                        if (mUsersRecentArtist.size() == 0) {
+                            runOnUiThread(() -> {
+                                Toast.makeText(getApplicationContext(), "No Spotify Listening History", Toast.LENGTH_LONG).show();
+                            });
+                            return;
+                        }
                         mUsersRecentArtist = getArtists(jsonObject);
                         Random random = new Random();
                         randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).artistID;
