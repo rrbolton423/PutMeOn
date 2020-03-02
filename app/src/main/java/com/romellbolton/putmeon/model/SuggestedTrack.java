@@ -96,6 +96,15 @@ public class SuggestedTrack implements Serializable {
 
     @Override
     public String toString() {
-        return "SuggestedTrack{" + "artist=" + artist + ", name=" + name + ", CoverURL64x64=" + CoverURL64x64 + ", CoverURL640x636=" + CoverURL640x636 + ", artistID=" + artistID + ", SongID=" + SongID + '}';
+        return "SuggestedTrack{" +
+                "artist='" + artist + '\'' +
+                ", name='" + name + '\'' +
+                ", CoverURL64x64='" + CoverURL64x64 + '\'' +
+                ", CoverURL640x636='" + CoverURL640x636 + '\'' +
+                ", artistID='" + artistID + '\'' +
+                ", SongID='" + SongID + '\'' +
+                ", sim=" + sim +
+                ", uri='" + uri + '\'' +
+                '}';
     }
 }

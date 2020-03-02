@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
                 AuthenticationRequest request = builder.build();
                 AuthenticationClient.openLoginActivity(loginActivity, REQUEST_CODE, request);
             } else {
-                Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
             }
         });
     }

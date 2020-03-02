@@ -79,14 +79,14 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
                 fetchRandomFavoriteSpotifyArtist();
             } else {
-                Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
             }
         });
 
         if (AppStatus.getInstance(this).isOnline()) {
             fetchRandomFavoriteSpotifyArtist();
         } else {
-            Toast.makeText(this, "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -121,7 +121,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                         mUsersRecentArtist = getArtists(jsonObject);
                         if (mUsersRecentArtist.size() == 0) {
                             runOnUiThread(() -> {
-                                Toast.makeText(getApplicationContext(), "No Spotify Listening History", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), R.string.no_spotify_listening_history, Toast.LENGTH_LONG).show();
                             });
                             return;
                         }
@@ -223,7 +223,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
     public void respondToSong(String url, String image, String songName, String albumName, String artistName) {
         if (url.contains("null")) {
-            Toast.makeText(this, "No Preview Available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.no_preview_available, Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = SpotifyTrackActivity.newIntent(this, new SuggestedTrack(artistName, songName, null, image, null, null, url));
             startActivity(intent);
@@ -360,7 +360,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                 if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
                     respondToSong(albumURLs.get(position), albumImgURLs.get(position), songNames.get(position), null, artistName.get(position));
                 } else {
-                    Toast.makeText(getApplicationContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
                 }
             });
 

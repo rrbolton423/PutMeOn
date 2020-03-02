@@ -78,7 +78,7 @@ public class SpotifyTrackFragment extends Fragment {
         if (AppStatus.getInstance(getContext()).isOnline()) {
             new DownloadImage().execute();
         } else {
-            Toast.makeText(getContext(), "Please Check Your Internet Connection", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -138,7 +138,7 @@ public class SpotifyTrackFragment extends Fragment {
 
         mShareButton = v.findViewById(R.id.spotify_track_playing_share);
         mShareButton.setOnClickListener(v12 -> {
-            String title = "Listen to this song!";
+            String title = getString(R.string.listen_to_this_song);
             String text = getString(R.string.message_currently_listening_to,
                     mTrackNameTextView.getText(),
                     mArtistNameTextView.getText(),
@@ -165,8 +165,8 @@ public class SpotifyTrackFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             mProgressDialog = new ProgressDialog(getActivity());
-            mProgressDialog.setTitle("Loading track");
-            mProgressDialog.setMessage("Loading...");
+            mProgressDialog.setTitle(getString(R.string.loading_track));
+            mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(false);
             mProgressDialog.show();
         }
@@ -209,9 +209,10 @@ public class SpotifyTrackFragment extends Fragment {
                 mMediaPlayer.setDataSource(url);
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
-                Toast.makeText(getContext(), "Now playing " + mTrackName + " by " + mArtistName, LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.now_playing) + mTrackName + getString(R.string.by) + mArtistName, LENGTH_LONG).show();
             } catch (IOException ioe) {
-                Log.e(TAG, "Unable to play track", ioe);
+                Log.e(TAG, getString(R.string.unable_to_play_track), ioe);
+                Toast.makeText(getContext(), R.string.unable_to_play_track, LENGTH_LONG).show();
             }
         }
     }
