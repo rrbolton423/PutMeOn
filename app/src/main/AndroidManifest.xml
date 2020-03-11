@@ -38,6 +38,7 @@
             android:name=".controller.SpotifyTrackActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
+            android:parentActivityName=".controller.TrackRecommendationActivity"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -51,6 +52,7 @@
             android:name=".controller.FavoriteSuggestedTracksActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
+            android:parentActivityName=".controller.TrackRecommendationActivity"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
