@@ -2,14 +2,38 @@ package com.romellbolton.putmeon.model;
 
 import java.io.Serializable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class SuggestedTrack implements Serializable {
+
+    @PrimaryKey(autoGenerate = true)
+    public int uid;
+
+    @ColumnInfo(name = "artist")
     private String artist;
+
+    @ColumnInfo(name = "name")
     private String name;
+
+    @ColumnInfo(name = "cover_url_64_x_64")
     private String CoverURL64x64;
+
+    @ColumnInfo(name = "cover_url_640_x_636")
     private String CoverURL640x636;
+
+    @ColumnInfo(name = "artist_id")
     private String artistID;
+
+    @ColumnInfo(name = "song_id")
     private String SongID;
+
+    @ColumnInfo(name = "sim")
     private float sim;
+
+    @ColumnInfo(name = "uri")
     private String uri;
 
     public String getURL() {
