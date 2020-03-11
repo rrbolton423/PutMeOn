@@ -40,6 +40,8 @@ public class SuggestedTrack implements Serializable {
         return uri;
     }
 
+    public String getUri() { return uri; }
+
     public void setUri(String uri) {
         this.uri = uri;
     }
@@ -98,9 +100,7 @@ public class SuggestedTrack implements Serializable {
         return CoverURL640x636;
     }
 
-    public void setCoverURL640x636(String CoverURL640x636) {
-        this.CoverURL640x636 = CoverURL640x636;
-    }
+    public void setCoverURL640x636(String CoverURL640x636) { this.CoverURL640x636 = CoverURL640x636; }
 
     public String getArtistID() {
         return artistID;
