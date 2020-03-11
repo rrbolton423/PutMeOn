@@ -18,27 +18,32 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.TrackHolder> {
-
+public class FavoriteSuggestedTracksAdapter extends RecyclerView.Adapter<FavoriteSuggestedTracksAdapter.TrackHolder> {
     public interface OnDeleteButtonClickListener {
-        void onDeleteButtonClicked(SuggestedTrack post);
+        void onDeleteButtonClicked(SuggestedTrack track);
+    }
+
+    public interface OnPlayButtonClickListener {
+        void onPlayButtonClicked(SuggestedTrack track);
     }
 
     private List<SuggestedTrack> data;
     private Context context;
     private LayoutInflater layoutInflater;
     private OnDeleteButtonClickListener onDeleteButtonClickListener;
+    private OnPlayButtonClickListener onPlayButtonClickListener;
 
-    public PostsAdapter(Context context, OnDeleteButtonClickListener listener) {
+    public FavoriteSuggestedTracksAdapter(Context context, OnDeleteButtonClickListener deleteButtonClickListener, OnPlayButtonClickListener playButtonClickListener) {
         this.data = new ArrayList<>();
         this.context = context;
-        this.onDeleteButtonClickListener = listener;
+        this.onDeleteButtonClickListener = deleteButtonClickListener;
+        this.onPlayButtonClickListener = playButtonClickListener;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public TrackHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.track_list_item, parent, false);
+        View itemView = layoutInflater.inflate(R.layout.favorite_track_list_item, parent, false);
         return new TrackHolder(itemView);
     }
 
@@ -54,8 +59,8 @@ class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.TrackHolder> {
 
     public void setData(List<SuggestedTrack> newData) {
         if (data != null) {
-            PostDiffCallback postDiffCallback = new PostDiffCallback(data, newData);
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(postDiffCallback);
+            TrackDiffCallback trackDiffCallback = new TrackDiffCallback(data, newData);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(trackDiffCallback);
 
             data.clear();
             data.addAll(newData);
@@ -69,7 +74,7 @@ class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.TrackHolder> {
     class TrackHolder extends RecyclerView.ViewHolder {
         TextView songName;
         TextView artistName;
-        Button mediaPlayerButton;
+        Button playTrackButton;
         ImageView coverArt;
         Button deleteTrackButton;
 
@@ -77,7 +82,7 @@ class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.TrackHolder> {
             super(v);
             songName = v.findViewById(R.id.songNameID);
             artistName = v.findViewById(R.id.artistNameID);
-            mediaPlayerButton = v.findViewById(R.id.openMediaPlayer);
+            playTrackButton = v.findViewById(R.id.openMediaPlayer);
             deleteTrackButton = v.findViewById(R.id.deleteTrackButton);
             coverArt = v.findViewById(R.id.coverArt);
         }
@@ -91,6 +96,10 @@ class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.TrackHolder> {
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
+                playTrackButton.setOnClickListener(v -> {
+                    if (onPlayButtonClickListener != null)
+                        onPlayButtonClickListener.onPlayButtonClicked(track);
+                });
                 deleteTrackButton.setOnClickListener(v -> {
                     if (onDeleteButtonClickListener != null)
                         onDeleteButtonClickListener.onDeleteButtonClicked(track);
@@ -100,13 +109,13 @@ class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.TrackHolder> {
         }
     }
 
-    class PostDiffCallback extends DiffUtil.Callback {
+    class TrackDiffCallback extends DiffUtil.Callback {
 
         private final List<SuggestedTrack> oldTracks, newTracks;
 
-        public PostDiffCallback(List<SuggestedTrack> oldPosts, List<SuggestedTrack> newPosts) {
-            this.oldTracks = oldPosts;
-            this.newTracks = newPosts;
+        public TrackDiffCallback(List<SuggestedTrack> oldTracks, List<SuggestedTrack> newTracks) {
+            this.oldTracks = oldTracks;
+            this.newTracks = newTracks;
         }
 
         @Override

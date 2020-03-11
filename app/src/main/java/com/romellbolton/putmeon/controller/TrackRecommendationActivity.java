@@ -1,6 +1,7 @@
 package com.romellbolton.putmeon.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import com.romellbolton.putmeon.R;
 import com.romellbolton.putmeon.model.RandomSpotifyTrack;
 import com.romellbolton.putmeon.model.SuggestedTrack;
 import com.romellbolton.putmeon.util.AppStatus;
+import com.romellbolton.putmeon.viewmodel.SuggestedTrackViewModel;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -66,12 +68,14 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     private ArrayList<String> albumURLs = new ArrayList<>();
     public String currentArtist;
     public String currentSong;
+    private SuggestedTrackViewModel postViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_recommendation);
 
+        postViewModel = ViewModelProviders.of(this).get(SuggestedTrackViewModel.class);
         accessToken = getIntent().getStringExtra("accessToken");
         cardStack = findViewById(R.id.swipe_deck);
         newSuggestionButton = findViewById(R.id.new_suggestions_button);
@@ -153,6 +157,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
                             @Override
                             public void cardSwipedRight(int position) {
+                                postViewModel.savePost(suggestedTracks.get(position));
                                 Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
                             }
 
@@ -162,14 +167,10 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void cardActionDown() {
-
-                            }
+                            public void cardActionDown() { }
 
                             @Override
-                            public void cardActionUp() {
-
-                            }
+                            public void cardActionUp() { }
                         });
 
                     } else {
@@ -241,7 +242,8 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorites:
-                break;
+                Intent intent = new Intent(this, FavoriteSuggestedTracksActivity.class);
+                startActivity(intent);
             case R.id.home:
                 onBackPressed();
         }

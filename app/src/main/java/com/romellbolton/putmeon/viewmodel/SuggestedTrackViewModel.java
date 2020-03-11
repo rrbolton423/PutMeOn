@@ -28,11 +28,11 @@ public class SuggestedTrackViewModel extends AndroidViewModel {
         return suggestedTrackDao.findAll();
     }
 
-    void savePost(SuggestedTrack suggestedTrack) {
+    public void savePost(SuggestedTrack suggestedTrack) {
         executorService.execute(() -> suggestedTrackDao.save(suggestedTrack));
     }
 
-    void deletePost(SuggestedTrack suggestedTrack) {
+    public void deletePost(SuggestedTrack suggestedTrack) {
         executorService.execute(() -> suggestedTrackDao.delete(suggestedTrack));
     }
 }
