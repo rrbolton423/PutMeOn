@@ -24,7 +24,7 @@ public class SuggestedTrackViewModel extends AndroidViewModel {
         executorService = Executors.newSingleThreadExecutor();
     }
 
-    LiveData<List<SuggestedTrack>> getAllTracks() {
+    public LiveData<List<SuggestedTrack>> getAllTracks() {
         return suggestedTrackDao.findAll();
     }
 
