@@ -13,17 +13,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.romellbolton.putmeon.R;
-import com.romellbolton.putmeon.adapter.FavoriteSuggestedTracksAdapter;
-import com.romellbolton.putmeon.model.SuggestedTrack;
-import com.romellbolton.putmeon.viewmodel.SuggestedTrackViewModel;
+import com.romellbolton.putmeon.adapter.FavoriteTracksAdapter;
+import com.romellbolton.putmeon.model.Track;
+import com.romellbolton.putmeon.viewmodel.TrackViewModel;
 
 import java.util.Objects;
 
-public class FavoriteSuggestedTracksActivity extends AppCompatActivity implements FavoriteSuggestedTracksAdapter.OnDeleteButtonClickListener, FavoriteSuggestedTracksAdapter.OnPlayButtonClickListener {
+public class FavoriteTracksActivity extends AppCompatActivity implements FavoriteTracksAdapter.OnDeleteButtonClickListener, FavoriteTracksAdapter.OnPlayButtonClickListener {
 
-    private FavoriteSuggestedTracksAdapter favoriteSuggestedTracksAdapter;
-    private SuggestedTrackViewModel postViewModel;
-
+    private FavoriteTracksAdapter favoriteTracksAdapter;
+    private TrackViewModel postViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,30 +30,30 @@ public class FavoriteSuggestedTracksActivity extends AppCompatActivity implement
         setContentView(R.layout.activity_favorites);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.favorties_title);
-        favoriteSuggestedTracksAdapter = new FavoriteSuggestedTracksAdapter(this, this, this);
+        favoriteTracksAdapter = new FavoriteTracksAdapter(this, this, this);
 
-        postViewModel = ViewModelProviders.of(this).get(SuggestedTrackViewModel.class);
-        postViewModel.getAllTracks().observe(this, tracks -> favoriteSuggestedTracksAdapter.setData(tracks));
+        postViewModel = ViewModelProviders.of(this).get(TrackViewModel.class);
+        postViewModel.getAllTracks().observe(this, tracks -> favoriteTracksAdapter.setData(tracks));
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(favoriteSuggestedTracksAdapter);
+        recyclerView.setAdapter(favoriteTracksAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 
     @Override
-    public void onDeleteButtonClicked(SuggestedTrack track) {
+    public void onDeleteButtonClicked(Track track) {
         postViewModel.deletePost(track);
     }
 
     @Override
-    public void onPlayButtonClicked(SuggestedTrack track) {
+    public void onPlayButtonClicked(Track track) {
         if (track.getURL().contains("null")) {
             Toast.makeText(this, R.string.no_preview_available, Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = SpotifyTrackActivity.newIntent(this, new SuggestedTrack(track.getArtist(), track.getName(), null, track.getCoverURL640x636(), null, null, track.getUri()));
+            Intent intent = TrackActivity.newIntent(this, new Track(track.getArtist(), track.getName(), null, track.getCoverURL640x636(), null, null, track.getUri()));
             startActivity(intent);
         }
     }

@@ -7,12 +7,12 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:allowBackup="true"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app_logo_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup">
         <activity
             android:name=".controller.LoginActivity"
             android:configChanges="orientation"
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".controller.SpotifyTrackActivity"
+            android:name=".controller.TrackActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:parentActivityName=".controller.TrackRecommendationActivity"
@@ -49,7 +49,7 @@
                 android:value=".controller.TrackRecommendationActivity" />
         </activity>
         <activity
-            android:name=".controller.FavoriteSuggestedTracksActivity"
+            android:name=".controller.FavoriteTracksActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:parentActivityName=".controller.TrackRecommendationActivity"

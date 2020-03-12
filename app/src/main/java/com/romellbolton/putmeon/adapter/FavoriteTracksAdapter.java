@@ -12,28 +12,22 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.romellbolton.putmeon.R;
-import com.romellbolton.putmeon.model.SuggestedTrack;
+import com.romellbolton.putmeon.model.Track;
 import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteSuggestedTracksAdapter extends RecyclerView.Adapter<FavoriteSuggestedTracksAdapter.TrackHolder> {
-    public interface OnDeleteButtonClickListener {
-        void onDeleteButtonClicked(SuggestedTrack track);
-    }
-
-    public interface OnPlayButtonClickListener {
-        void onPlayButtonClicked(SuggestedTrack track);
-    }
-
-    private List<SuggestedTrack> data;
+public class FavoriteTracksAdapter extends RecyclerView.Adapter<FavoriteTracksAdapter.TrackHolder> {
+    private List<Track> data;
     private Context context;
     private LayoutInflater layoutInflater;
     private OnDeleteButtonClickListener onDeleteButtonClickListener;
     private OnPlayButtonClickListener onPlayButtonClickListener;
 
-    public FavoriteSuggestedTracksAdapter(Context context, OnDeleteButtonClickListener deleteButtonClickListener, OnPlayButtonClickListener playButtonClickListener) {
+    public FavoriteTracksAdapter(Context context, OnDeleteButtonClickListener deleteButtonClickListener, OnPlayButtonClickListener playButtonClickListener) {
         this.data = new ArrayList<>();
         this.context = context;
         this.onDeleteButtonClickListener = deleteButtonClickListener;
@@ -41,10 +35,29 @@ public class FavoriteSuggestedTracksAdapter extends RecyclerView.Adapter<Favorit
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void setData(List<Track> newData) {
+        if (data != null) {
+            TrackDiffCallback trackDiffCallback = new TrackDiffCallback(data, newData);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(trackDiffCallback);
+
+            data.clear();
+            data.addAll(newData);
+            diffResult.dispatchUpdatesTo(this);
+        } else {
+            // first initialization
+            data = newData;
+        }
+    }
+
+    @NotNull
     @Override
-    public TrackHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TrackHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View itemView = layoutInflater.inflate(R.layout.favorite_track_list_item, parent, false);
         return new TrackHolder(itemView);
+    }
+
+    public interface OnDeleteButtonClickListener {
+        void onDeleteButtonClicked(Track track);
     }
 
     @Override
@@ -57,18 +70,8 @@ public class FavoriteSuggestedTracksAdapter extends RecyclerView.Adapter<Favorit
         return data.size();
     }
 
-    public void setData(List<SuggestedTrack> newData) {
-        if (data != null) {
-            TrackDiffCallback trackDiffCallback = new TrackDiffCallback(data, newData);
-            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(trackDiffCallback);
-
-            data.clear();
-            data.addAll(newData);
-            diffResult.dispatchUpdatesTo(this);
-        } else {
-            // first initialization
-            data = newData;
-        }
+    public interface OnPlayButtonClickListener {
+        void onPlayButtonClicked(Track track);
     }
 
     class TrackHolder extends RecyclerView.ViewHolder {
@@ -87,12 +90,12 @@ public class FavoriteSuggestedTracksAdapter extends RecyclerView.Adapter<Favorit
             coverArt = v.findViewById(R.id.coverArt);
         }
 
-        void bind(final SuggestedTrack track) {
+        void bind(final Track track) {
             if (track != null) {
                 songName.setText(track.getName());
                 artistName.setText(track.getArtist());
                 try {
-                    Picasso.get().load(track.getCoverURL64x64()).into(coverArt);
+                    Picasso.get().load(track.getCoverURL640x636()).into(coverArt);
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -104,16 +107,15 @@ public class FavoriteSuggestedTracksAdapter extends RecyclerView.Adapter<Favorit
                     if (onDeleteButtonClickListener != null)
                         onDeleteButtonClickListener.onDeleteButtonClicked(track);
                 });
-
             }
         }
     }
 
     class TrackDiffCallback extends DiffUtil.Callback {
 
-        private final List<SuggestedTrack> oldTracks, newTracks;
+        private final List<Track> oldTracks, newTracks;
 
-        public TrackDiffCallback(List<SuggestedTrack> oldTracks, List<SuggestedTrack> newTracks) {
+        TrackDiffCallback(List<Track> oldTracks, List<Track> newTracks) {
             this.oldTracks = oldTracks;
             this.newTracks = newTracks;
         }

@@ -1,6 +1,8 @@
 package com.romellbolton.putmeon.controller;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
@@ -8,7 +10,6 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +24,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.romellbolton.putmeon.R;
-import com.romellbolton.putmeon.model.SuggestedTrack;
+import com.romellbolton.putmeon.model.Track;
 import com.romellbolton.putmeon.util.AppStatus;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import static android.widget.Toast.LENGTH_LONG;
 
-public class SpotifyTrackFragment extends Fragment {
+public class TrackFragment extends Fragment {
     private static final String TAG = "SpotifyTrackFragment";
     private static final String TRACK_POSITION = "spotify_track_position";
     private static final String TRACK_KEY = "TRACK";
@@ -44,20 +48,20 @@ public class SpotifyTrackFragment extends Fragment {
     private ImageButton mPauseButton;
     private Button mShareButton;
 
-    private static SuggestedTrack mSpotifySuggestedTrack;
+    private static Track mSpotifyTrack;
     private static MediaPlayer mMediaPlayer;
     private static ProgressDialog mProgressDialog;
 
-    protected static String mPreviewURL;
+    private static String mPreviewURL;
     private String mArtistName;
     private String mTrackName;
     private String imageURL;
 
-    public static SpotifyTrackFragment newInstance(SuggestedTrack suggestedTrack) {
+    static TrackFragment newInstance(Track track) {
         Bundle args = new Bundle();
-        args.putSerializable(TRACK_KEY, suggestedTrack);
+        args.putSerializable(TRACK_KEY, track);
 
-        SpotifyTrackFragment fragment = new SpotifyTrackFragment();
+        TrackFragment fragment = new TrackFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -68,14 +72,16 @@ public class SpotifyTrackFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mMediaPlayer = new MediaPlayer();
-        mSpotifySuggestedTrack = (SuggestedTrack) getArguments().getSerializable(TRACK_KEY);
+        assert getArguments() != null;
+        mSpotifyTrack = (Track) getArguments().getSerializable(TRACK_KEY);
 
-        mArtistName = mSpotifySuggestedTrack.getArtist();
-        mTrackName = mSpotifySuggestedTrack.getName();
-        mPreviewURL = mSpotifySuggestedTrack.getURL();
-        imageURL = mSpotifySuggestedTrack.getCoverURL640x636();
+        assert mSpotifyTrack != null;
+        mArtistName = mSpotifyTrack.getArtist();
+        mTrackName = mSpotifyTrack.getName();
+        mPreviewURL = mSpotifyTrack.getURL();
+        imageURL = mSpotifyTrack.getCoverURL640x636();
 
-        if (AppStatus.getInstance(getContext()).isOnline()) {
+        if (AppStatus.getInstance(Objects.requireNonNull(getContext())).isOnline()) {
             new DownloadImage().execute();
         } else {
             Toast.makeText(getContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
@@ -91,7 +97,7 @@ public class SpotifyTrackFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(TRACK_POSITION, mMediaPlayer.getCurrentPosition());
         Log.i(TAG, "Position now before rotate: " + mMediaPlayer.getCurrentPosition());
@@ -119,7 +125,7 @@ public class SpotifyTrackFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_spotify_track_playing, container, false);
+        View v = inflater.inflate(R.layout.fragment_track_playing, container, false);
 
         mArtistNameTextView = v.findViewById(R.id.spotify_track_playing_artist_name);
         mTrackImageView = v.findViewById(R.id.spotify_track_playing_image);
@@ -156,9 +162,10 @@ public class SpotifyTrackFragment extends Fragment {
     }
 
     private void setActivityTitle(String text) {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(text);
+        Objects.requireNonNull(((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setTitle(text);
     }
 
+    @SuppressLint("StaticFieldLeak")
     private class DownloadImage extends AsyncTask<Void, Void, Bitmap> {
 
         @Override
@@ -175,8 +182,8 @@ public class SpotifyTrackFragment extends Fragment {
         protected Bitmap doInBackground(Void... params) {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.no_image);
 
-            if (mSpotifySuggestedTrack != null) {
-                String imageURL = mSpotifySuggestedTrack.getCoverURL640x636();
+            if (mSpotifyTrack != null) {
+                String imageURL = mSpotifyTrack.getCoverURL640x636();
                 try {
                     InputStream input = new java.net.URL(imageURL).openStream();
                     bitmap = BitmapFactory.decodeStream(input);

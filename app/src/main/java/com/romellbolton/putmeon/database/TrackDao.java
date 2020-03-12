@@ -8,25 +8,25 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.romellbolton.putmeon.model.SuggestedTrack;
+import com.romellbolton.putmeon.model.Track;
 
 import java.util.List;
 
 @Dao
-public interface SuggestedTrackDao {
+public interface TrackDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void saveAll(List<SuggestedTrack> suggestedTracks);
+    void saveAll(List<Track> tracks);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void save(SuggestedTrack track);
+    void save(Track track);
 
     @Update
-    void update(SuggestedTrack track);
+    void update(Track track);
 
     @Delete
-    void delete(SuggestedTrack track);
+    void delete(Track track);
 
-    @Query("SELECT * FROM SuggestedTrack")
-    LiveData<List<SuggestedTrack>> findAll();
+    @Query("SELECT * FROM Track")
+    LiveData<List<Track>> findAll();
 }

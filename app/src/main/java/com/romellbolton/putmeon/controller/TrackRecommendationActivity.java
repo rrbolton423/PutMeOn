@@ -1,8 +1,5 @@
 package com.romellbolton.putmeon.controller;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +16,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.bumptech.glide.Glide;
+import com.daprlabs.cardstack.SwipeDeck;
+import com.romellbolton.putmeon.R;
+import com.romellbolton.putmeon.model.Track;
+import com.romellbolton.putmeon.util.AppStatus;
+import com.romellbolton.putmeon.viewmodel.TrackViewModel;
+
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -29,32 +41,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
-import com.bumptech.glide.Glide;
-import com.daprlabs.cardstack.SwipeDeck;
-import com.romellbolton.putmeon.R;
-import com.romellbolton.putmeon.model.RandomSpotifyTrack;
-import com.romellbolton.putmeon.model.SuggestedTrack;
-import com.romellbolton.putmeon.util.AppStatus;
-import com.romellbolton.putmeon.viewmodel.SuggestedTrackViewModel;
-
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Call;
 import okhttp3.Request;
 
 public class TrackRecommendationActivity extends AppCompatActivity {
 
     private static final String TAG = TrackRecommendationActivity.class.getSimpleName();
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private ArrayList<RandomSpotifyTrack> mUsersRecentArtist = new ArrayList<>();
-    private LinkedList<SuggestedTrack> suggestedTracks = new LinkedList<>();
+    private ArrayList<Track> mUsersRecentArtist = new ArrayList<>();
+    private LinkedList<Track> tracks = new LinkedList<>();
     private Call call;
     private SwipeDeck cardStack;
     SwipeDeckAdapter adapter = new SwipeDeckAdapter(null, this);
@@ -68,14 +68,14 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     private ArrayList<String> albumURLs = new ArrayList<>();
     public String currentArtist;
     public String currentSong;
-    private SuggestedTrackViewModel postViewModel;
+    private TrackViewModel postViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_recommendation);
 
-        postViewModel = ViewModelProviders.of(this).get(SuggestedTrackViewModel.class);
+        postViewModel = ViewModelProviders.of(this).get(TrackViewModel.class);
         accessToken = getIntent().getStringExtra("accessToken");
         cardStack = findViewById(R.id.swipe_deck);
         newSuggestionButton = findViewById(R.id.new_suggestions_button);
@@ -113,34 +113,32 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) {
                 try {
                     if (response.isSuccessful()) {
-                        suggestedTracks = null;
+                        tracks = null;
                         songNames.clear();
                         artistNames.clear();
                         albumImgURLs.clear();
                         albumURLs.clear();
                         adapter.notifyDataSetChanged();
 
-                        final JSONObject jsonObject = new JSONObject(response.body().string());
+                        final JSONObject jsonObject = new JSONObject(Objects.requireNonNull(response.body()).string());
 
                         mUsersRecentArtist = getArtists(jsonObject);
                         if (mUsersRecentArtist.size() == 0) {
-                            runOnUiThread(() -> {
-                                Toast.makeText(getApplicationContext(), R.string.no_spotify_listening_history, Toast.LENGTH_LONG).show();
-                            });
+                            runOnUiThread(() -> Toast.makeText(getApplicationContext(), R.string.no_spotify_listening_history, Toast.LENGTH_LONG).show());
                             return;
                         }
 
                         Random random = new Random();
-                        randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).artistID;
-                        randomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).trackID;
-                        suggestedTracks = recommendationsOnSeed(randomArtistID, randomTrackID);
-                        Collections.shuffle(suggestedTracks);
+                        randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).getArtistID();
+                        randomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).getSongID();
+                        tracks = recommendationsOnSeed(randomArtistID, randomTrackID);
+                        Collections.shuffle(tracks);
 
-                        for (int i = 0; i < suggestedTracks.size(); i++) {
-                            songNames.add(suggestedTracks.get(i).getName());
-                            artistNames.add(suggestedTracks.get(i).getArtist());
-                            albumImgURLs.add(suggestedTracks.get(i).getCoverURL640x636());
-                            albumURLs.add(suggestedTracks.get(i).getURL());
+                        for (int i = 0; i < tracks.size(); i++) {
+                            songNames.add(tracks.get(i).getName());
+                            artistNames.add(tracks.get(i).getArtist());
+                            albumImgURLs.add(tracks.get(i).getCoverURL640x636());
+                            albumURLs.add(tracks.get(i).getURL());
                         }
 
                         runOnUiThread(() -> {
@@ -157,7 +155,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
                             @Override
                             public void cardSwipedRight(int position) {
-                                postViewModel.savePost(suggestedTracks.get(position));
+                                postViewModel.savePost(tracks.get(position));
                                 Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
                             }
 
@@ -196,7 +194,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         dialog.show(getFragmentManager(), "error_dialog");
     }
 
-    public ArrayList<RandomSpotifyTrack> getArtists(JSONObject jsonObject) {
+    public ArrayList<Track> getArtists(JSONObject jsonObject) {
         if (jsonObject.has("items")) {
             try {
                 JSONArray jsonArray = jsonObject.getJSONArray("items");
@@ -211,7 +209,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                     String artistID = (String) jsonAlbum.getJSONArray("artists").getJSONObject(0).get("id");
                     String trackID = jsonAlbum.getString("id");
 
-                    RandomSpotifyTrack track_object = new RandomSpotifyTrack(trackName, artistName, trackID, artistID);
+                    Track track_object = new Track(artistName, trackName, null, null, artistID, trackID, null);
                     mUsersRecentArtist.add(track_object); //to be used in Ui later
                 }
 
@@ -226,7 +224,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         if (url.contains("null")) {
             Toast.makeText(this, R.string.no_preview_available, Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = SpotifyTrackActivity.newIntent(this, new SuggestedTrack(artistName, songName, null, image, null, null, url));
+            Intent intent = TrackActivity.newIntent(this, new Track(artistName, songName, null, image, null, null, url));
             startActivity(intent);
         }
     }
@@ -242,7 +240,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.favorites:
-                Intent intent = new Intent(this, FavoriteSuggestedTracksActivity.class);
+                Intent intent = new Intent(this, FavoriteTracksActivity.class);
                 startActivity(intent);
             case R.id.home:
                 onBackPressed();
@@ -250,7 +248,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public LinkedList<SuggestedTrack> recommendationsOnSeed(String randomArtistID, String randomTrackID) throws IOException, JSONException {
+    public LinkedList<Track> recommendationsOnSeed(String randomArtistID, String randomTrackID) throws IOException, JSONException {
         URL url = new URL("https://api.spotify.com/v1/recommendations?market=US&seed_artists="
                 + randomArtistID + "&seed_tracks=" + randomTrackID + "&min_energy=0.4&min_popularity=50");
         System.out.println("GetRecURL: " + url.toString());
@@ -264,7 +262,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         con.setRequestProperty("Authorization", "Bearer " + accessToken);
 
         int status = con.getResponseCode();
-        Reader streamReader = null;
+        Reader streamReader;
         if (status == 400) {
             streamReader = new InputStreamReader(con.getErrorStream());
         } else {
@@ -284,7 +282,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         JSONObject JsonSpotifyRecommendations = new JSONObject(recStr);
         System.out.println(recStr);
         JSONArray recs = JsonSpotifyRecommendations.getJSONArray("tracks");
-        LinkedList<SuggestedTrack> recommendedList = new LinkedList<>();
+        LinkedList<Track> recommendedList = new LinkedList<>();
 
         for (int i = 0; i < recs.length(); i++) {
             JSONArray artistNameArr = (JSONArray) recs.getJSONObject(i).get("artists");
@@ -304,7 +302,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             String songID = recs.getJSONObject(i).getString("id");
             String previewUrl = recs.getJSONObject(i).getString("preview_url");
 
-            recommendedList.add(new SuggestedTrack(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID, previewUrl));
+            recommendedList.add(new Track(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID, previewUrl));
         }
         return recommendedList;
 
@@ -320,7 +318,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
         private List<String> artistName;
         private Context context;
 
-        public SwipeDeckAdapter(ArrayList<String> artistNames, Context context) {
+        SwipeDeckAdapter(ArrayList<String> artistNames, Context context) {
             this.artistName = artistNames;
             this.context = context;
         }

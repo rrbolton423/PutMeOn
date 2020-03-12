@@ -1,13 +1,13 @@
 package com.romellbolton.putmeon.model;
 
-import java.io.Serializable;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity
-public class SuggestedTrack implements Serializable {
+public class Track implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
     public int uid;
@@ -46,7 +46,7 @@ public class SuggestedTrack implements Serializable {
         this.uri = uri;
     }
 
-    public SuggestedTrack(String artist, String name, String CoverURL64x64, String CoverURL640x636, String artistID, String SongID, String uri) {
+    public Track(String artist, String name, String CoverURL64x64, String CoverURL640x636, String artistID, String SongID, String uri) {
         this.artist = artist;
         this.name = name;
         this.CoverURL64x64 = CoverURL64x64;
@@ -56,12 +56,12 @@ public class SuggestedTrack implements Serializable {
         this.uri = uri;
     }
 
-    public SuggestedTrack(String artist, String name) {
+    public Track(String artist, String name) {
         this.artist = artist;
         this.name = name;
     }
 
-    public SuggestedTrack() {
+    public Track() {
     }
 
     public float getSim() {
@@ -116,19 +116,5 @@ public class SuggestedTrack implements Serializable {
 
     public void setSongID(String SongID) {
         this.SongID = SongID;
-    }
-
-    @Override
-    public String toString() {
-        return "SuggestedTrack{" +
-                "artist='" + artist + '\'' +
-                ", name='" + name + '\'' +
-                ", CoverURL64x64='" + CoverURL64x64 + '\'' +
-                ", CoverURL640x636='" + CoverURL640x636 + '\'' +
-                ", artistID='" + artistID + '\'' +
-                ", SongID='" + SongID + '\'' +
-                ", sim=" + sim +
-                ", uri='" + uri + '\'' +
-                '}';
     }
 }

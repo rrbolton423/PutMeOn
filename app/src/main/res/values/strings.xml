@@ -22,10 +22,11 @@
     <string name="no_preview_available">No Preview Available</string>
     <string name="no_spotify_listening_history">No Spotify Listening History</string>
     <string name="loading_track">Loading track</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="listen_to_this_song">Listen to this song!</string>
     <string name="now_playing">\"Now playing \"</string>
     <string name="by">\" by \"</string>
     <string name="unable_to_play_track">Unable to play track</string>
-    <string name="favorties_title">Favorites</string>
+    <string name="favorties_title">Favorite Tracks</string>
+    <string name="button_pause_content_description">Displays pause symbol image on button</string>
 </resources>
