@@ -165,10 +165,12 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void cardActionDown() { }
+                            public void cardActionDown() {
+                            }
 
                             @Override
-                            public void cardActionUp() { }
+                            public void cardActionUp() {
+                            }
                         });
 
                     } else {
@@ -305,11 +307,6 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             recommendedList.add(new Track(artistName, songName, CoverURL64x64, CoverURL640x636, artistID, songID, previewUrl));
         }
         return recommendedList;
-
-        // TODO: When swiped right, save track to shared preferences, when swiped left, do nothing
-        // TODO: Set up SuggestedTrack Adapter screen with list of all favorite songs, allow users to play 30 second clips of it
-        // TODO: Set up Favorites / List View Activity displaying the saved suggestedTracks being loaded from device storage
-        // TODO: Access favorites list by way of a menu button
     }
 
 
