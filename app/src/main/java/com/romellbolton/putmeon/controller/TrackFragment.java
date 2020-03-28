@@ -55,7 +55,7 @@ public class TrackFragment extends Fragment {
     private static String mPreviewURL;
     private String mArtistName;
     private String mTrackName;
-    private String imageURL;
+    private String mImageURL;
 
     static TrackFragment newInstance(Track track) {
         Bundle args = new Bundle();
@@ -79,7 +79,7 @@ public class TrackFragment extends Fragment {
         mArtistName = mSpotifyTrack.getArtist();
         mTrackName = mSpotifyTrack.getName();
         mPreviewURL = mSpotifyTrack.getURL();
-        imageURL = mSpotifyTrack.getCoverURL640x636();
+        mImageURL = mSpotifyTrack.getCoverURL640x636();
 
         if (AppStatus.getInstance(Objects.requireNonNull(getContext())).isOnline()) {
             new DownloadImage().execute();
@@ -196,7 +196,7 @@ public class TrackFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Bitmap result) {
-            Picasso.get().load(imageURL).into(mTrackImageView);
+            Picasso.get().load(mImageURL).into(mTrackImageView);
             mTrackNameTextView.setText(mTrackName);
             mArtistNameTextView.setText(mArtistName);
             setActivityTitle(mTrackName);

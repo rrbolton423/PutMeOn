@@ -20,9 +20,8 @@ import com.romellbolton.putmeon.viewmodel.TrackViewModel;
 import java.util.Objects;
 
 public class FavoriteTracksActivity extends AppCompatActivity implements FavoriteTracksAdapter.OnDeleteButtonClickListener, FavoriteTracksAdapter.OnPlayButtonClickListener {
-
-    private FavoriteTracksAdapter favoriteTracksAdapter;
-    private TrackViewModel postViewModel;
+    private FavoriteTracksAdapter mFavoriteTracksAdapter;
+    private TrackViewModel mPostViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,22 +29,22 @@ public class FavoriteTracksActivity extends AppCompatActivity implements Favorit
         setContentView(R.layout.activity_favorites);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.favorties_title);
-        favoriteTracksAdapter = new FavoriteTracksAdapter(this, this, this);
+        mFavoriteTracksAdapter = new FavoriteTracksAdapter(this, this, this);
 
-        postViewModel = ViewModelProviders.of(this).get(TrackViewModel.class);
-        postViewModel.getAllTracks().observe(this, tracks -> favoriteTracksAdapter.setData(tracks));
+        mPostViewModel = ViewModelProviders.of(this).get(TrackViewModel.class);
+        mPostViewModel.getAllTracks().observe(this, tracks -> mFavoriteTracksAdapter.setmData(tracks));
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(favoriteTracksAdapter);
+        recyclerView.setAdapter(mFavoriteTracksAdapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
     }
 
     @Override
     public void onDeleteButtonClicked(Track track) {
-        postViewModel.deletePost(track);
+        mPostViewModel.deletePost(track);
     }
 
     @Override

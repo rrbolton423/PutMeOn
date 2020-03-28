@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import com.romellbolton.putmeon.R;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
-
     protected abstract Fragment createFragment();
 
     @Override

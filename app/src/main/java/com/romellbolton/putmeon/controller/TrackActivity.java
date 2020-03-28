@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 import com.romellbolton.putmeon.model.Track;
 
 public class TrackActivity extends SingleFragmentActivity {
-
     private static final String TRACK_KEY = "TRACK";
 
     public static Intent newIntent(Context context, Track track) {

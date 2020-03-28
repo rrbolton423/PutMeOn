@@ -50,36 +50,36 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 public class TrackRecommendationActivity extends AppCompatActivity {
-
     private static final String TAG = TrackRecommendationActivity.class.getSimpleName();
+
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
+    public String mCurrentArtist;
     private ArrayList<Track> mUsersRecentArtist = new ArrayList<>();
-    private LinkedList<Track> tracks = new LinkedList<>();
-    private Call call;
-    private SwipeDeck cardStack;
-    SwipeDeckAdapter adapter = new SwipeDeckAdapter(null, this);
-    private Button newSuggestionButton;
-    private String accessToken = "accessToken";
-    private String randomArtistID;
-    private String randomTrackID;
-    private ArrayList<String> artistNames = new ArrayList<>();
-    private ArrayList<String> songNames = new ArrayList<>();
-    private ArrayList<String> albumImgURLs = new ArrayList<>();
-    private ArrayList<String> albumURLs = new ArrayList<>();
-    public String currentArtist;
-    public String currentSong;
-    private TrackViewModel postViewModel;
+    public String mCurrentSong;
+    SwipeDeckAdapter mAdapter = new SwipeDeckAdapter(null, this);
+    private Call mCall;
+    private LinkedList<Track> mTracks = new LinkedList<>();
+    private SwipeDeck mCardStack;
+    private ArrayList<String> mArtistNames = new ArrayList<>();
+    private ArrayList<String> mSongNames = new ArrayList<>();
+    private ArrayList<String> mAlbumImgURLs = new ArrayList<>();
+    private ArrayList<String> mAlbumURLs = new ArrayList<>();
+    private TrackViewModel mPostViewModel;
+    private Button mNewSuggestionButton;
+    private String mAccessToken = "accessToken";
+    private String mRandomArtistID;
+    private String mRandomTrackID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_recommendation);
 
-        postViewModel = ViewModelProviders.of(this).get(TrackViewModel.class);
-        accessToken = getIntent().getStringExtra("accessToken");
-        cardStack = findViewById(R.id.swipe_deck);
-        newSuggestionButton = findViewById(R.id.new_suggestions_button);
-        newSuggestionButton.setOnClickListener(view -> {
+        mPostViewModel = ViewModelProviders.of(this).get(TrackViewModel.class);
+        mAccessToken = getIntent().getStringExtra("accessToken");
+        mCardStack = findViewById(R.id.swipe_deck);
+        mNewSuggestionButton = findViewById(R.id.new_suggestions_button);
+        mNewSuggestionButton.setOnClickListener(view -> {
             if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
                 fetchRandomFavoriteSpotifyArtist();
             } else {
@@ -95,30 +95,30 @@ public class TrackRecommendationActivity extends AppCompatActivity {
     }
 
     private void cancelCall() {
-        if (call != null) {
-            call.cancel();
+        if (mCall != null) {
+            mCall.cancel();
         }
     }
 
     public void fetchRandomFavoriteSpotifyArtist() {
         final Request request = new Request.Builder()
                 .url("https://api.spotify.com/v1/me/player/recently-played")
-                .addHeader("Authorization", "Bearer " + accessToken)
+                .addHeader("Authorization", "Bearer " + mAccessToken)
                 .build();
         cancelCall();
-        call = mOkHttpClient.newCall(request);
-        call.enqueue(new Callback() {
+        mCall = mOkHttpClient.newCall(request);
+        mCall.enqueue(new Callback() {
 
             @Override
             public void onResponse(@NotNull okhttp3.Call call, @NotNull okhttp3.Response response) {
                 try {
                     if (response.isSuccessful()) {
-                        tracks = null;
-                        songNames.clear();
-                        artistNames.clear();
-                        albumImgURLs.clear();
-                        albumURLs.clear();
-                        adapter.notifyDataSetChanged();
+                        mTracks = null;
+                        mSongNames.clear();
+                        mArtistNames.clear();
+                        mAlbumImgURLs.clear();
+                        mAlbumURLs.clear();
+                        mAdapter.notifyDataSetChanged();
 
                         final JSONObject jsonObject = new JSONObject(Objects.requireNonNull(response.body()).string());
 
@@ -129,25 +129,25 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                         }
 
                         Random random = new Random();
-                        randomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).getArtistID();
-                        randomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).getSongID();
-                        tracks = recommendationsOnSeed(randomArtistID, randomTrackID);
-                        Collections.shuffle(tracks);
+                        mRandomArtistID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).getArtistID();
+                        mRandomTrackID = mUsersRecentArtist.get(random.nextInt(mUsersRecentArtist.size())).getSongID();
+                        mTracks = recommendationsOnSeed(mRandomArtistID, mRandomTrackID);
+                        Collections.shuffle(mTracks);
 
-                        for (int i = 0; i < tracks.size(); i++) {
-                            songNames.add(tracks.get(i).getName());
-                            artistNames.add(tracks.get(i).getArtist());
-                            albumImgURLs.add(tracks.get(i).getCoverURL640x636());
-                            albumURLs.add(tracks.get(i).getURL());
+                        for (int i = 0; i < mTracks.size(); i++) {
+                            mSongNames.add(mTracks.get(i).getName());
+                            mArtistNames.add(mTracks.get(i).getArtist());
+                            mAlbumImgURLs.add(mTracks.get(i).getCoverURL640x636());
+                            mAlbumURLs.add(mTracks.get(i).getURL());
                         }
 
                         runOnUiThread(() -> {
-                            adapter = new SwipeDeckAdapter(artistNames, getApplicationContext());
-                            cardStack.setAdapter(adapter);
+                            mAdapter = new SwipeDeckAdapter(mArtistNames, getApplicationContext());
+                            mCardStack.setAdapter(mAdapter);
                         });
 
 
-                        cardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
+                        mCardStack.setEventCallback(new SwipeDeck.SwipeEventCallback() {
                             @Override
                             public void cardSwipedLeft(int position) {
                                 Log.i("MainActivity", "card was swiped left, position in adapter: " + position);
@@ -155,7 +155,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
                             @Override
                             public void cardSwipedRight(int position) {
-                                postViewModel.savePost(tracks.get(position));
+                                mPostViewModel.savePost(mTracks.get(position));
                                 Log.i("MainActivity", "card was swiped right, position in adapter: " + position);
                             }
 
@@ -186,7 +186,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull okhttp3.Call call, @NotNull IOException e) {
                 e.printStackTrace();
-                Log.e("TAG", accessToken);
+                Log.e("TAG", mAccessToken);
             }
         });
     }
@@ -261,7 +261,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
 
         con.setRequestProperty("Accept", "application/json");
         con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Authorization", "Bearer " + accessToken);
+        con.setRequestProperty("Authorization", "Bearer " + mAccessToken);
 
         int status = con.getResponseCode();
         Reader streamReader;
@@ -344,18 +344,18 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                 v = inflater.inflate(R.layout.track_card_view, parent, false);
             }
 
-            ((TextView) v.findViewById(R.id.song_name)).setText(songNames.get(position));
+            ((TextView) v.findViewById(R.id.song_name)).setText(mSongNames.get(position));
             ((TextView) v.findViewById(R.id.artist_name)).setText(artistName.get(position));
-            currentArtist = ((TextView) v.findViewById(R.id.artist_name)).getText().toString();
-            currentSong = ((TextView) v.findViewById(R.id.song_name)).getText().toString();
+            mCurrentArtist = ((TextView) v.findViewById(R.id.artist_name)).getText().toString();
+            mCurrentSong = ((TextView) v.findViewById(R.id.song_name)).getText().toString();
 
             Glide.with(context)
-                    .load(albumImgURLs.get(position))
+                    .load(mAlbumImgURLs.get(position))
                     .into(((ImageView) v.findViewById(R.id.song_image)));
 
             v.setOnClickListener(view -> {
                 if (AppStatus.getInstance(getApplicationContext()).isOnline()) {
-                    respondToSong(albumURLs.get(position), albumImgURLs.get(position), songNames.get(position), null, artistName.get(position));
+                    respondToSong(mAlbumURLs.get(position), mAlbumImgURLs.get(position), mSongNames.get(position), null, artistName.get(position));
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.check_internet_connection, Toast.LENGTH_SHORT).show();
                 }

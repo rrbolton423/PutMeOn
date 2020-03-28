@@ -21,38 +21,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FavoriteTracksAdapter extends RecyclerView.Adapter<FavoriteTracksAdapter.TrackHolder> {
-    private List<Track> data;
-    private Context context;
-    private LayoutInflater layoutInflater;
-    private OnDeleteButtonClickListener onDeleteButtonClickListener;
-    private OnPlayButtonClickListener onPlayButtonClickListener;
+    private List<Track> mData;
+    private LayoutInflater mLayoutInflater;
+    private OnDeleteButtonClickListener mOnDeleteButtonClickListener;
+    private OnPlayButtonClickListener mOnPlayButtonClickListener;
 
     public FavoriteTracksAdapter(Context context, OnDeleteButtonClickListener deleteButtonClickListener, OnPlayButtonClickListener playButtonClickListener) {
-        this.data = new ArrayList<>();
-        this.context = context;
-        this.onDeleteButtonClickListener = deleteButtonClickListener;
-        this.onPlayButtonClickListener = playButtonClickListener;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.mData = new ArrayList<>();
+        this.mOnDeleteButtonClickListener = deleteButtonClickListener;
+        this.mOnPlayButtonClickListener = playButtonClickListener;
+        this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    public void setData(List<Track> newData) {
-        if (data != null) {
-            TrackDiffCallback trackDiffCallback = new TrackDiffCallback(data, newData);
+    public void setmData(List<Track> newData) {
+        if (mData != null) {
+            TrackDiffCallback trackDiffCallback = new TrackDiffCallback(mData, newData);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(trackDiffCallback);
 
-            data.clear();
-            data.addAll(newData);
+            mData.clear();
+            mData.addAll(newData);
             diffResult.dispatchUpdatesTo(this);
         } else {
             // first initialization
-            data = newData;
+            mData = newData;
         }
     }
 
     @NotNull
     @Override
     public TrackHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        View itemView = layoutInflater.inflate(R.layout.favorite_track_list_item, parent, false);
+        View itemView = mLayoutInflater.inflate(R.layout.favorite_track_list_item, parent, false);
         return new TrackHolder(itemView);
     }
 
@@ -62,12 +60,12 @@ public class FavoriteTracksAdapter extends RecyclerView.Adapter<FavoriteTracksAd
 
     @Override
     public void onBindViewHolder(TrackHolder holder, int position) {
-        holder.bind(data.get(position));
+        holder.bind(mData.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return mData.size();
     }
 
     public interface OnPlayButtonClickListener {
@@ -100,12 +98,12 @@ public class FavoriteTracksAdapter extends RecyclerView.Adapter<FavoriteTracksAd
                     e.printStackTrace();
                 }
                 playTrackButton.setOnClickListener(v -> {
-                    if (onPlayButtonClickListener != null)
-                        onPlayButtonClickListener.onPlayButtonClicked(track);
+                    if (mOnPlayButtonClickListener != null)
+                        mOnPlayButtonClickListener.onPlayButtonClicked(track);
                 });
                 deleteTrackButton.setOnClickListener(v -> {
-                    if (onDeleteButtonClickListener != null)
-                        onDeleteButtonClickListener.onDeleteButtonClicked(track);
+                    if (mOnDeleteButtonClickListener != null)
+                        mOnDeleteButtonClickListener.onDeleteButtonClicked(track);
                 });
             }
         }
