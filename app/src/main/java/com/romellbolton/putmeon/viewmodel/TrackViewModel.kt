@@ -10,21 +10,23 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class TrackViewModel(application: Application) : AndroidViewModel(application) {
-    private val trackDao: TrackDao
+    private val trackDao: TrackDao?
     private val executorService: ExecutorService
     val allTracks: LiveData<List<Track?>?>?
-        get() = trackDao.findAll()
+        get() = trackDao?.findAll()
 
     fun savePost(track: Track?) {
-        executorService.execute { trackDao.save(track) }
+        executorService.execute {
+            trackDao?.save(track)
+        }
     }
 
     fun deletePost(track: Track?) {
-        executorService.execute { trackDao.delete(track) }
+        executorService.execute { trackDao?.delete(track) }
     }
 
     init {
-        trackDao = TracksDatabase.getInstance(application).suggestedTrackDao()
+        trackDao = TracksDatabase.getInstance(application)?.suggestedTrackDao()
         executorService = Executors.newSingleThreadExecutor()
     }
 }
