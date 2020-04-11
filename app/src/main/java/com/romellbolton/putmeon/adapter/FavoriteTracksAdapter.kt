@@ -69,8 +69,8 @@ class FavoriteTracksAdapter(context: Context, deleteButtonClickListener: OnDelet
                 } catch (e: NullPointerException) {
                     e.printStackTrace()
                 }
-                playTrackButton.setOnClickListener { v: View? -> mOnPlayButtonClickListener?.onPlayButtonClicked(track) }
-                deleteTrackButton.setOnClickListener { v: View? -> mOnDeleteButtonClickListener?.onDeleteButtonClicked(track) }
+                playTrackButton.setOnClickListener { mOnPlayButtonClickListener?.onPlayButtonClicked(track) }
+                deleteTrackButton.setOnClickListener { mOnDeleteButtonClickListener?.onDeleteButtonClicked(track) }
             }
         }
 

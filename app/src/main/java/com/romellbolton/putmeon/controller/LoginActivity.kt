@@ -3,7 +3,6 @@ package com.romellbolton.putmeon.controller
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         mContext = applicationContext
         val loginButton: Button
         loginButton = findViewById(R.id.action_login)
-        loginButton.setOnClickListener { v: View? ->
+        loginButton.setOnClickListener {
             if (getInstance(applicationContext).isOnline) {
                 val builder = AuthenticationRequest.Builder(CLIENT_ID,
                         AuthenticationResponse.Type.TOKEN,

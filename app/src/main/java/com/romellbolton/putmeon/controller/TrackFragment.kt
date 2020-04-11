@@ -86,7 +86,7 @@ class TrackFragment : Fragment() {
         mTrackImageView = v.findViewById(R.id.spotify_track_playing_image)
         mTrackNameTextView = v.findViewById(R.id.spotify_track_playing_title)
         mPauseButton = v.findViewById(R.id.spotify_track_playing_button_pause)
-        mPauseButton.setOnClickListener(View.OnClickListener { v1: View? ->
+        mPauseButton.setOnClickListener(View.OnClickListener {
             if (mMediaPlayer!!.isPlaying) {
                 mPauseButton.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 mMediaPlayer!!.pause()
@@ -96,7 +96,7 @@ class TrackFragment : Fragment() {
             }
         })
         mShareButton = v.findViewById(R.id.spotify_track_playing_share)
-        mShareButton.setOnClickListener(View.OnClickListener { v12: View? ->
+        mShareButton.setOnClickListener(View.OnClickListener {
             val title = getString(R.string.listen_to_this_song)
             val text = getString(R.string.message_currently_listening_to,
                     mTrackNameTextView.text,
@@ -153,7 +153,7 @@ class TrackFragment : Fragment() {
         private fun bootstrapPlayer() {
             mMediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
             mMediaPlayer!!.setOnPreparedListener { obj: MediaPlayer -> obj.start() }
-            mMediaPlayer!!.setOnCompletionListener { mp: MediaPlayer? -> mPauseButton.setImageResource(R.drawable.ic_play_arrow_black_24dp) }
+            mMediaPlayer!!.setOnCompletionListener { mPauseButton.setImageResource(R.drawable.ic_play_arrow_black_24dp) }
             playSpotifyTrack(mPreviewURL)
         }
 
