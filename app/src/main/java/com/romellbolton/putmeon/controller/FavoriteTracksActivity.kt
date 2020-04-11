@@ -41,10 +41,10 @@ class FavoriteTracksActivity : AppCompatActivity(), OnDeleteButtonClickListener,
     }
 
     override fun onPlayButtonClicked(track: Track?) {
-        if (track!!.url.contains("null")) {
+        if (track!!.url?.contains("null")!!) {
             Toast.makeText(this, R.string.no_preview_available, Toast.LENGTH_SHORT).show()
         } else {
-            val intent = TrackActivity.newIntent(this, Track(track.artist, track.name, null, track.coverURL640x636, null, null, track.uri))
+            val intent = TrackActivity.newIntent(this, Track(track.artist, track.name, null, track.coverURL640x636, null, null, track.url))
             startActivity(intent)
         }
     }

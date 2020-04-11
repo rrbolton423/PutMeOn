@@ -138,7 +138,7 @@ public class TrackRecommendationActivity extends AppCompatActivity {
                             mSongNames.add(mTracks.get(i).getName());
                             mArtistNames.add(mTracks.get(i).getArtist());
                             mAlbumImgURLs.add(mTracks.get(i).getCoverURL640x636());
-                            mAlbumURLs.add(mTracks.get(i).getURL());
+                            mAlbumURLs.add(mTracks.get(i).getUrl());
                         }
 
                         runOnUiThread(() -> {
