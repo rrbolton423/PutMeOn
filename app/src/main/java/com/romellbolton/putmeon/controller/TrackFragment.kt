@@ -162,7 +162,7 @@ class TrackFragment : Fragment() {
                 mMediaPlayer!!.setDataSource(url)
                 mMediaPlayer!!.prepare()
                 mMediaPlayer!!.start()
-                Toast.makeText(context, getString(R.string.now_playing) + mTrackName + getString(R.string.by) + mArtistName, Toast.LENGTH_LONG).show()
+                Toast.makeText(context, getString(R.string.now_playing) + mTrackName + getString(R.string.by) + " " + mArtistName, Toast.LENGTH_LONG).show()
             } catch (ioe: IOException) {
                 Log.e(TAG, getString(R.string.unable_to_play_track), ioe)
                 Toast.makeText(context, R.string.unable_to_play_track, Toast.LENGTH_LONG).show()
